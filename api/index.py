@@ -1,5 +1,7 @@
+import json
 import os
 import sys
+import urllib.parse
 from pathlib import Path
 
 # Add project root directory to sys.path
@@ -18,14 +20,27 @@ server.init_db()
 
 class handler(server.AgoraHandler):
     def get_effective_path(self):
-        # Resolve path from Vercel rewrite headers if available
-        raw_path = (
-            self.headers.get("x-forwarded-uri")
-            or self.headers.get("x-matched-path")
-            or self.headers.get("x-invoke-path")
-            or self.path
-        )
-        return raw_path.split("?")[0]
+        # 1. Check rewrite query parameter ?__path=... or ?path=...
+        parsed = urllib.parse.urlparse(self.path)
+        qs = urllib.parse.parse_qs(parsed.query)
+        if "__path" in qs:
+            sub = qs["__path"][0].strip("/")
+            return f"/api/{sub}"
+        if "path" in qs:
+            sub = qs["path"][0].strip("/")
+            return f"/api/{sub}"
+
+        # 2. Check Vercel headers if present
+        for h in ["x-vercel-matched-path", "x-matched-path", "x-forwarded-uri", "x-invoke-path"]:
+            v = self.headers.get(h)
+            if v and "/api/" in v:
+                return v.split("?")[0]
+
+        # 3. If path is already /api/... and not index.py
+        if parsed.path.startswith("/api/") and not parsed.path.endswith("index.py") and not parsed.path.endswith("index"):
+            return parsed.path
+
+        return parsed.path
 
     def do_GET(self):
         if not hasattr(self, "requestline"):

@@ -377,14 +377,6 @@
         <div id="roulette-actions" class="hidden space-y-3">
           <p class="text-xs font-semibold uppercase tracking-wider text-[#6D655B]">Continue Exploring This Lesson</p>
           <div class="flex flex-wrap gap-2">
-            <button type="button" data-action="Practice Exercise"
-              class="roulette-action-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-[#9A6B2F] hover:bg-[#855B26] text-white transition-colors shadow-sm">
-              Practice Exercise
-            </button>
-            <button type="button" data-action="Test My Understanding"
-              class="roulette-action-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-[#2C5E4F] hover:bg-[#234C3F] text-white transition-colors shadow-sm">
-              Test My Understanding
-            </button>
             <button type="button" data-action="Explain More"
               class="roulette-action-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-white hover:bg-[#EFE9DF] border border-[#DFD7CA] text-[#1F1D1A] transition-colors">
               Explain More
@@ -402,55 +394,13 @@
               Tell Me Something More Surprising
             </button>
             <button type="button" data-action="Quiz Me"
-              class="roulette-action-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-white hover:bg-[#EFE9DF] border border-[#DFD7CA] text-[#1F1D1A] transition-colors">
+              class="roulette-action-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-[#2C5E4F] hover:bg-[#234C3F] text-white transition-colors">
               Quiz Me
             </button>
             <button type="button" data-action="Explore Related Topics"
               class="roulette-action-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-white hover:bg-[#EFE9DF] border border-[#DFD7CA] text-[#1F1D1A] transition-colors">
               Explore Related Topics
             </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Communication & Negotiation Learning Module Card -->
-      <div class="max-w-3xl mx-auto pt-4 border-t border-[#EDE8DF] space-y-4">
-        <div class="p-5 sm:p-6 rounded-2xl bg-[#FAF8F4] border border-[#E5DFD5] shadow-sm space-y-4">
-          <div class="flex flex-wrap items-center justify-between gap-3">
-            <div>
-              <div class="flex items-center gap-2">
-                <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#9A6B2F] text-white">Learning Module</span>
-                <span class="text-xs text-[#6D655B]">Under English Vocabulary</span>
-              </div>
-              <h3 class="font-serif-editorial text-lg sm:text-xl font-semibold text-[#1F1D1A] mt-1">Communication, Negotiation &amp; Professional Skills</h3>
-              <p class="text-xs text-[#6D655B] max-w-xl">Master real-life fluency, persuasive negotiation tactics, emotional intelligence, and confident communication for college, interviews, and work.</p>
-            </div>
-            <div class="text-right">
-              <span id="comm-progress-badge" class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#EFE9DF] text-[#7C3D25]">0 of 30 Completed</span>
-            </div>
-          </div>
-
-          <!-- Progress Bar -->
-          <div class="w-full bg-[#E5DFD5] rounded-full h-2 overflow-hidden">
-            <div id="comm-progress-bar" class="bg-[#9A6B2F] h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
-          </div>
-
-          <!-- Filters & Action -->
-          <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
-            <div class="inline-flex rounded-lg bg-[#EFE9DF] p-1 border border-[#D8D0C4] text-xs" role="tablist">
-              <button id="filter-comm-all" type="button" class="px-2.5 py-1 rounded-md font-medium bg-[#1F1D1A] text-white transition-colors">All (30)</button>
-              <button id="filter-comm-negotiation" type="button" class="px-2.5 py-1 rounded-md font-medium text-[#5C554C] hover:text-[#1F1D1A] transition-colors">Negotiation (10)</button>
-              <button id="filter-comm-skills" type="button" class="px-2.5 py-1 rounded-md font-medium text-[#5C554C] hover:text-[#1F1D1A] transition-colors">Communication (20)</button>
-              <button id="filter-comm-uncompleted" type="button" class="px-2.5 py-1 rounded-md font-medium text-[#5C554C] hover:text-[#1F1D1A] transition-colors">Uncompleted</button>
-            </div>
-            <button id="btn-spin-comm-random" type="button" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-[#9A6B2F] hover:bg-[#855B26] text-white transition-colors flex items-center gap-1.5 shadow-sm">
-              <span>🎯 Spin Uncompleted Skill</span>
-            </button>
-          </div>
-
-          <!-- Topics Grid -->
-          <div id="comm-topics-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-72 overflow-y-auto chat-scroll pr-1">
-            <!-- Populated by JS -->
           </div>
         </div>
       </div>
@@ -607,26 +557,10 @@
           "Why do humans across every culture make music?",
           "What is the Overview Effect astronauts experience in space?"
         ]
-      },
-      {
-        id: "communication",
-        name: "Communication & Negotiation",
-        questions: [
-          "How do I respond effectively to a lowball offer without losing my position?",
-          "What is BATNA and how do I determine mine before entering a negotiation?",
-          "How can I use 'No-Oriented Questions' to lower defenses in difficult conversations?",
-          "How do I say 'no' at work or to clients without feeling guilty or sounding unprofessional?"
-        ]
       }
     ];
 
     const DAILY_CONCEPTS = [
-      {
-        category: "English Vocabulary • Negotiation",
-        title: "The Walk-Away & BATNA",
-        teaser: "Why the greatest leverage in any negotiation is having a clear alternative and the polite resolve to walk away.",
-        prompt: "Teach me about BATNA (Best Alternative to a Negotiated Agreement) and The Walk-Away tactic in negotiation. Follow the 11-part lesson structure with real-life examples and practical exercises."
-      },
       {
         category: "Philosophy",
         title: "Existentialism",
@@ -724,43 +658,8 @@
       history: [],
       rouletteHistory: [],
       officialToday: null,
-      activeLesson: null,
-      learningTopics: [],
-      activeCommFilter: "all"
+      activeLesson: null
     };
-
-    const DEFAULT_COMMUNICATION_TOPICS = [
-      { module: "Negotiation Tactics", topic: "The Lowball", description: "Understanding low initial offers and how to respond without losing your negotiating position." },
-      { module: "Negotiation Tactics", topic: "The Walk-Away", description: "Knowing when to leave a negotiation politely and protect your interests." },
-      { module: "Negotiation Tactics", topic: "Bracketing", description: "Keeping your target price in the middle while negotiating." },
-      { module: "Negotiation Tactics", topic: "The Nibble", description: "Recognising small additional demands and handling them professionally." },
-      { module: "Negotiation Tactics", topic: "The Vise", description: "Responding to pressure such as 'You\\'ll have to do better than that.'" },
-      { module: "Negotiation Tactics", topic: "Trading Concessions", description: "Making progressively smaller concessions instead of giving everything away." },
-      { module: "Negotiation Tactics", topic: "BATNA (Best Alternative to a Negotiated Agreement)", description: "Understanding your best alternative when an agreement cannot be reached." },
-      { module: "Negotiation Tactics", topic: "ZOPA (Zone of Possible Agreement)", description: "Identifying the range in which both parties can reach an agreement." },
-      { module: "Negotiation Tactics", topic: "The Ackerman Model", description: "Understanding a structured negotiation strategy involving calculated offers and counteroffers." },
-      { module: "Negotiation Tactics", topic: "The No-Oriented Question", description: "Using questions that make people comfortable expressing disagreement and explaining their position." },
-      { module: "Communication Skills", topic: "Active Listening", description: "Listening to understand rather than just waiting to speak, using verbal and non-verbal cues." },
-      { module: "Communication Skills", topic: "Assertive Communication", description: "Expressing needs, boundaries, and opinions clearly and respectfully without being aggressive or passive." },
-      { module: "Communication Skills", topic: "Persuasive Communication", description: "Structuring arguments using logic, emotion, and credibility (Ethos, Pathos, Logos) to influence others ethically." },
-      { module: "Communication Skills", topic: "Emotional Intelligence", description: "Recognizing, understanding, and managing emotions in yourself and during interactions with others." },
-      { module: "Communication Skills", topic: "Conflict Resolution", description: "De-escalating tension and resolving disagreements by focusing on shared interests rather than entrenched positions." },
-      { module: "Communication Skills", topic: "Handling Difficult Conversations", description: "Navigating high-stakes, sensitive, or uncomfortable discussions with composure, empathy, and clarity." },
-      { module: "Communication Skills", topic: "Asking Powerful Questions", description: "Formulating open-ended, insightful questions that uncover hidden motivations and provoke thoughtful dialogue." },
-      { module: "Communication Skills", topic: "Body Language and Non-Verbal Communication", description: "Mastering posture, eye contact, gestures, tone of voice, and micro-expressions to convey warmth and authority." },
-      { module: "Communication Skills", topic: "Building Rapport", description: "Establishing genuine trust, common ground, and positive emotional connection quickly and authentically." },
-      { module: "Communication Skills", topic: "Public Speaking", description: "Overcoming stage anxiety, organizing spoken presentations, and engaging audiences with poise." },
-      { module: "Communication Skills", topic: "Storytelling Skills", description: "Using narrative arcs, relatable characters, and vivid imagery to make complex ideas memorable and engaging." },
-      { module: "Communication Skills", topic: "Critical Thinking in Conversations", description: "Evaluating arguments objectively, detecting logical fallacies, and questioning assumptions without being combative." },
-      { module: "Communication Skills", topic: "Professional Etiquette", description: "Mastering executive communication, meeting decorum, email clarity, and workplace professionalism." },
-      { module: "Communication Skills", topic: "Giving and Receiving Feedback", description: "Delivering constructive feedback with psychological safety and receiving critique without becoming defensive." },
-      { module: "Communication Skills", topic: "Handling Rejection", description: "Responding to 'no' with grace, resilience, and curiosity, maintaining relationships for future opportunities." },
-      { module: "Communication Skills", topic: "Thinking Before Responding", description: "Developing the habit of deliberate pausing, emotional self-regulation, and composing thoughtful replies under pressure." },
-      { module: "Communication Skills", topic: "Saying No Without Feeling Guilty", description: "Setting firm personal and professional boundaries gracefully, clearly, and without over-apologizing." },
-      { module: "Communication Skills", topic: "Communicating with Confidence", description: "Projecting self-assurance, vocal variety, clear articulation, and presence in high-stakes environments." },
-      { module: "Communication Skills", topic: "Interview Communication Skills", description: "Framing career narratives, handling behavioral questions (STAR method), and establishing rapport with interviewers." },
-      { module: "Communication Skills", topic: "Client Communication and Relationship Management", description: "Managing expectations, communicating progress transparently, handling scope disputes, and nurturing long-term client trust." }
-    ];
 
     function getLocalDateStr() {
       const d = new Date();
@@ -942,119 +841,7 @@
           }
           renderRouletteState();
         }
-        await loadLearningTopicsFromServer();
-      } catch (_) {
-        await loadLearningTopicsFromServer();
-      }
-    }
-
-    async function loadLearningTopicsFromServer() {
-      if (canUseBackend && state.backendHealthy) {
-        try {
-          const res = await fetch("/api/learning-topics");
-          if (res.ok) {
-            const data = await res.json();
-            if (Array.isArray(data.topics)) {
-              state.learningTopics = data.topics;
-              renderLearningTopics();
-              return;
-            }
-          }
-        } catch (_) {}
-      }
-      // Fallback: sync DEFAULT_COMMUNICATION_TOPICS with local history
-      const completedSet = new Set(
-        state.rouletteHistory
-          .filter((r) => r.category === "English Vocabulary")
-          .map((r) => r.topic.trim())
-      );
-      state.learningTopics = DEFAULT_COMMUNICATION_TOPICS.map((item, idx) => ({
-        id: idx + 1,
-        category: "English Vocabulary",
-        module: item.module,
-        topic: item.topic,
-        description: item.description,
-        status: completedSet.has(item.topic.trim()) ? "completed" : "uncompleted"
-      }));
-      renderLearningTopics();
-    }
-
-    function renderLearningTopics() {
-      const grid = document.getElementById("comm-topics-grid");
-      const progressBadge = document.getElementById("comm-progress-badge");
-      const progressBar = document.getElementById("comm-progress-bar");
-      if (!grid) return;
-
-      const topics = state.learningTopics || [];
-      const total = topics.length || 30;
-      const completedCount = topics.filter((t) => t.status === "completed").length;
-      const pct = Math.round((completedCount / total) * 100);
-
-      if (progressBadge) {
-        progressBadge.textContent = `${completedCount} of ${total} Completed`;
-      }
-      if (progressBar) {
-        progressBar.style.width = `${pct}%`;
-      }
-
-      const filter = state.activeCommFilter || "all";
-      const filtered = topics.filter((t) => {
-        if (filter === "negotiation") return t.module === "Negotiation Tactics";
-        if (filter === "skills") return t.module === "Communication Skills";
-        if (filter === "uncompleted") return t.status !== "completed";
-        return true;
-      });
-
-      if (!filtered.length) {
-        grid.innerHTML = `<p class="col-span-full text-xs text-[#8C7A68] italic p-3 text-center">No topics match this filter.</p>`;
-        return;
-      }
-
-      grid.innerHTML = filtered.map((item) => {
-        const isDone = item.status === "completed";
-        const isNeg = item.module === "Negotiation Tactics";
-        const badgeColor = isNeg ? "bg-[#7C3D25] text-white" : "bg-[#2C5E4F] text-white";
-        const statusBadge = isDone
-          ? `<span class="text-[10px] px-2 py-0.5 rounded-full bg-[#E2ECE6] text-[#2C5E4F] font-semibold flex items-center gap-1">✓ Done</span>`
-          : `<span class="text-[10px] px-2 py-0.5 rounded-full bg-[#EFE9DF] text-[#7C3D25] font-semibold">Available</span>`;
-
-        return `
-          <div class="p-3 rounded-xl border transition-all ${
-            isDone ? "bg-[#FAF8F4]/70 border-[#E2ECE6]" : "bg-white border-[#E5DFD5] hover:border-[#B85D3B]"
-          } flex flex-col justify-between gap-2 shadow-xs">
-            <div>
-              <div class="flex items-center justify-between gap-1.5 mb-1">
-                <span class="text-[9.5px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded-md ${badgeColor}">
-                  ${isNeg ? "Negotiation" : "Communication"}
-                </span>
-                ${statusBadge}
-              </div>
-              <h4 class="text-xs sm:text-[13px] font-semibold text-[#1F1D1A] leading-snug">${item.topic}</h4>
-              <p class="text-[11px] text-[#6D655B] line-clamp-2 mt-1 leading-relaxed">${item.description}</p>
-            </div>
-            <div class="pt-1.5 flex items-center justify-end">
-              <button type="button" data-topic-name="${item.topic.replace(/"/g, '&quot;')}"
-                class="btn-spin-specific-topic px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
-                  isDone
-                    ? "bg-[#EFE9DF] hover:bg-[#E5DFD5] text-[#4A433B]"
-                    : "bg-[#9A6B2F] hover:bg-[#855B26] text-white shadow-xs"
-                }">
-                ${isDone ? "Review Topic" : "Spin & Learn →"}
-              </button>
-            </div>
-          </div>
-        `;
-      }).join("");
-
-      grid.querySelectorAll(".btn-spin-specific-topic").forEach((btn) => {
-        btn.addEventListener("click", () => {
-          const topicName = btn.getAttribute("data-topic-name");
-          if (topicName) {
-            spinRoulette(false, topicName);
-            document.getElementById("roulette-wheel").scrollIntoView({ behavior: "smooth", block: "center" });
-          }
-        });
-      });
+      } catch (_) {}
     }
 
     function getRuleBasedReply(userText) {
@@ -1209,7 +996,7 @@ Start with the simplest meaning, explain unfamiliar words immediately, use relat
       svg.innerHTML = paths;
     }
 
-    async function spinRoulette(isOfficial, targetTopic = null) {
+    async function spinRoulette(isOfficial) {
       if (state.isSpinning) return;
       if (isOfficial && state.officialToday) {
         state.activeLesson = state.officialToday;
@@ -1221,10 +1008,10 @@ Start with the simplest meaning, explain unfamiliar words immediately, use relat
       document.getElementById("btn-spin-official").disabled = true;
       document.getElementById("btn-spin-practice").disabled = true;
 
-      // Pick slice index: if targetTopic is specified, align with slice 3 ("English Vocabulary")
+      // Pick slice index
       const sliceCount = ROULETTE_SLICES.length;
       const sliceDeg = 360 / sliceCount;
-      const chosenIdx = targetTopic ? 3 : Math.floor(Math.random() * sliceCount);
+      const chosenIdx = Math.floor(Math.random() * sliceCount);
       const chosenCategory = ROULETTE_SLICES[chosenIdx].name;
 
       // Align chosen slice center with top pointer (0 deg)
@@ -1246,56 +1033,15 @@ Start with the simplest meaning, explain unfamiliar words immediately, use relat
 
       if ((!canUseBackend || !state.backendHealthy) && state.previewApiKey) {
         try {
-          let isComm = false;
-          let commTopic = null;
-          if (chosenCategory === "English Vocabulary") {
-            if (targetTopic) {
-              commTopic = DEFAULT_COMMUNICATION_TOPICS.find((t) => t.topic === targetTopic);
-              if (commTopic) isComm = true;
-            } else {
-              const uncompleted = (state.learningTopics || []).filter((t) => t.status !== "completed");
-              if (uncompleted.length && Math.random() < 0.70) {
-                commTopic = uncompleted[Math.floor(Math.random() * uncompleted.length)];
-                isComm = true;
-              }
-            }
-          }
-
-          let prompt = "";
-          if (isComm && commTopic) {
-            prompt = `You are teaching a lesson in the master series: "Communication, Negotiation & Professional Skills" under the category "English Vocabulary".
-TOPIC: ${commTopic.topic}
-SUBMODULE: ${commTopic.module}
-CORE THEME: ${commTopic.description}
-
-PHILOSOPHY: The learner does NOT want manipulative tricks or dishonest tactics. The goal is to develop an ethical, confident, thoughtful communicator who understands human behaviour, listens carefully, expresses ideas clearly, handles disagreements intelligently, and negotiates fairly for mutual benefit (win-win).
-
-Line 1 MUST be:
-TOPIC: ${commTopic.topic}
-
-Follow this EXACT 11-part Markdown structure:
-## 1. Introduction
-## 2. Simple Explanation
-## 3. Background and Origin
-## 4. Detailed Explanation
-## 5. Real-Life Examples (College, Interviews/Salary, Workplace, Business/Clients, Everyday)
-## 6. Practical Conversation
-## 7. Vocabulary Builder (At least 5 words with pronunciation, simple meaning, origin, synonyms/antonyms, 5 sentences, and natural usage)
-## 8. Common Mistakes
-## 9. Practical Exercise (Scenario asking how learner would respond, prompt them to attempt answer first)
-## 10. Understanding Test (Three questions)
-## 11. Weekly Challenge (One small real-world activity)`;
-          } else {
-            const usedTopics = state.rouletteHistory
-              .filter((r) => r.category === chosenCategory)
-              .slice(0, 20)
-              .map((r) => r.topic)
-              .join(", ") || "None yet";
-            const vocabExtra = chosenCategory === "English Vocabulary"
-              ? "\nInclude pronunciation, simple meaning, word origin, synonyms/antonyms, 5 example sentences, and how to use it naturally."
-              : "";
-            prompt = `Select ONE fascinating, relatively unfamiliar topic in "${chosenCategory}". Avoid: ${usedTopics}.${vocabExtra}\nLine 1 MUST be: TOPIC: <Short Title>\nThen write a simple-English beginner-friendly lesson with these 9 sections:\n## 1. Topic Introduction\n## 2. What Does It Mean?\n## 3. Background and Origin\n## 4. Detailed Explanation\n## 5. Interesting Facts\n## 6. Real-Life Examples and Connections\n## 7. Why Is This Important?\n## 8. Three Surprising Things to Remember\n## 9. Three Questions to Test Your Understanding`;
-          }
+          const usedTopics = state.rouletteHistory
+            .filter((r) => r.category === chosenCategory)
+            .slice(0, 20)
+            .map((r) => r.topic)
+            .join(", ") || "None yet";
+          const vocabExtra = chosenCategory === "English Vocabulary"
+            ? "\nInclude pronunciation, simple meaning, word origin, synonyms/antonyms, 5 example sentences, and how to use it naturally."
+            : "";
+          const prompt = `Select ONE fascinating, relatively unfamiliar topic in "${chosenCategory}". Avoid: ${usedTopics}.${vocabExtra}\nLine 1 MUST be: TOPIC: <Short Title>\nThen write a simple-English beginner-friendly lesson with these 9 sections:\n## 1. Topic Introduction\n## 2. What Does It Mean?\n## 3. Background and Origin\n## 4. Detailed Explanation\n## 5. Interesting Facts\n## 6. Real-Life Examples and Connections\n## 7. Why Is This Important?\n## 8. Three Surprising Things to Remember\n## 9. Three Questions to Test Your Understanding`;
 
           const { text } = await callGeminiDirectInBrowser(
             BROWSER_SYSTEM_PROMPT,
@@ -1303,7 +1049,7 @@ Follow this EXACT 11-part Markdown structure:
             8192
           );
           const lines = text.split("\n");
-          let topic = (isComm && commTopic) ? commTopic.topic : `Discovery in ${chosenCategory}`;
+          let topic = `Discovery in ${chosenCategory}`;
           let articleLines = lines;
           if (lines[0] && lines[0].trim().toUpperCase().startsWith("TOPIC:")) {
             topic = lines[0].split(":", 2)[1].trim() || topic;
@@ -1321,7 +1067,6 @@ Follow this EXACT 11-part Markdown structure:
           if (lesson.isOfficial) state.officialToday = lesson;
           state.rouletteHistory.unshift(lesson);
           saveRouletteToStorage();
-          await loadLearningTopicsFromServer();
           renderRouletteState();
         } catch (err) {
           document.getElementById("roulette-article-card").innerHTML =
@@ -1343,7 +1088,6 @@ Follow this EXACT 11-part Markdown structure:
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             category: chosenCategory,
-            topic: targetTopic || undefined,
             isOfficial,
             localDate: getLocalDateStr()
           })
@@ -1372,7 +1116,6 @@ Follow this EXACT 11-part Markdown structure:
         }
         state.rouletteHistory.unshift(lesson);
         saveRouletteToStorage();
-        await loadLearningTopicsFromServer();
         renderRouletteState();
       } catch (err) {
         document.getElementById("roulette-article-card").innerHTML = `
@@ -1938,41 +1681,6 @@ Follow this EXACT 11-part Markdown structure:
       );
     });
 
-    function setCommFilter(filter) {
-      state.activeCommFilter = filter;
-      const btnAll = document.getElementById("filter-comm-all");
-      const btnNeg = document.getElementById("filter-comm-negotiation");
-      const btnSkills = document.getElementById("filter-comm-skills");
-      const btnUncompleted = document.getElementById("filter-comm-uncompleted");
-      if (!btnAll) return;
-
-      const activeClass = "px-2.5 py-1 rounded-md font-medium bg-[#1F1D1A] text-white transition-colors";
-      const inactiveClass = "px-2.5 py-1 rounded-md font-medium text-[#5C554C] hover:text-[#1F1D1A] transition-colors";
-
-      btnAll.className = filter === "all" ? activeClass : inactiveClass;
-      btnNeg.className = filter === "negotiation" ? activeClass : inactiveClass;
-      btnSkills.className = filter === "skills" ? activeClass : inactiveClass;
-      btnUncompleted.className = filter === "uncompleted" ? activeClass : inactiveClass;
-
-      renderLearningTopics();
-    }
-
-    document.getElementById("filter-comm-all")?.addEventListener("click", () => setCommFilter("all"));
-    document.getElementById("filter-comm-negotiation")?.addEventListener("click", () => setCommFilter("negotiation"));
-    document.getElementById("filter-comm-skills")?.addEventListener("click", () => setCommFilter("skills"));
-    document.getElementById("filter-comm-uncompleted")?.addEventListener("click", () => setCommFilter("uncompleted"));
-
-    document.getElementById("btn-spin-comm-random")?.addEventListener("click", () => {
-      const uncompleted = (state.learningTopics || []).filter((t) => t.status !== "completed");
-      if (!uncompleted.length) {
-        alert("Congratulations! All 30 topics in the Communication & Negotiation module are completed. You can still review any topic below!");
-        return;
-      }
-      const pick = uncompleted[Math.floor(Math.random() * uncompleted.length)];
-      spinRoulette(false, pick.topic);
-      document.getElementById("roulette-wheel").scrollIntoView({ behavior: "smooth", block: "center" });
-    });
-
     document.getElementById("btn-apply-preview-key").addEventListener("click", () => {
       const val = document.getElementById("preview-api-key-input").value.trim();
       state.previewApiKey = val;
@@ -1991,7 +1699,6 @@ Follow this EXACT 11-part Markdown structure:
     drawRouletteWheel();
     renderDailyConcept();
     renderLearningHistory();
-    loadLearningTopicsFromServer();
     startNewChat();
     checkBackendHealth();
   </script>
