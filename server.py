@@ -11,6 +11,7 @@ import json
 import os
 import random
 import sqlite3
+import tempfile
 import urllib.error
 import urllib.request
 from datetime import datetime
@@ -20,7 +21,11 @@ from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent
 PUBLIC_DIR = BASE_DIR / "public"
 ENV_FILE = BASE_DIR / ".env"
-DB_PATH = BASE_DIR / "agora.db"
+
+if os.environ.get("VERCEL"):
+    DB_PATH = Path(tempfile.gettempdir()) / "agora.db"
+else:
+    DB_PATH = BASE_DIR / "agora.db"
 
 MAX_HISTORY_TURNS = 16
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
@@ -245,6 +250,15 @@ def get_db():
 
 
 def init_db():
+    if os.environ.get("VERCEL") and not DB_PATH.exists():
+        src_db = BASE_DIR / "agora.db"
+        if src_db.exists():
+            import shutil
+            try:
+                shutil.copy2(src_db, DB_PATH)
+            except Exception as e:
+                print(f"[Agora] Notice: Could not copy seed db to /tmp: {e}")
+
     with get_db() as conn:
         conn.execute(
             """
@@ -550,7 +564,9 @@ Use this exact 9-part Markdown structure:
 
 class AgoraHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory=str(PUBLIC_DIR), **kwargs)
+        if "directory" not in kwargs:
+            kwargs["directory"] = str(PUBLIC_DIR)
+        super().__init__(*args, **kwargs)
 
     def send_json(self, status_code, payload):
         body = json.dumps(payload).encode("utf-8")
@@ -752,7 +768,8 @@ class AgoraHandler(SimpleHTTPRequestHandler):
         self.send_json(404, {"error": "Endpoint not found."})
 
     def log_message(self, format, *args):
-        print(f"[Agora] {self.address_string()} - {format % args}")
+        addr = self.address_string() if hasattr(self, "client_address") else "Serverless"
+        print(f"[Agora] {addr} - {format % args}")
 
 
 if __name__ == "__main__":

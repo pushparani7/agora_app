@@ -39,7 +39,18 @@ Integrated under **English Vocabulary**, this module teaches 30 high-impact topi
   11. Weekly Challenge (Real-world action item)
 - **Ethical Learning Philosophy:** Focuses on becoming a confident, thoughtful, ethical communicator who understands human psychology, listens carefully, and negotiates fairly for mutual benefit (win-win) rather than manipulation.
 
+## Deploying to Vercel (1-Click Ready)
+
+Agora is configured for serverless deployment on Vercel:
+
+1. Import your GitHub repository (`pushparani7/agora_app`) into [Vercel](https://vercel.com).
+2. In the Vercel project settings, add your **Environment Variable**:
+   - `GEMINI_API_KEY`: Your Google Gemini API Key.
+3. Click **Deploy**. Vercel will automatically serve the static frontend from `public/` and route `/api/*` to the Python serverless function at `api/index.py`.
+
 ## Architecture
 
-- `server.py` — Secure Python 3 backend (`http.server` + `urllib.request` + `sqlite3`) that persists `roulette_lessons` and `learning_topics`, applies the 11-part lesson prompt structure, and serves `/api/learning-topics`, `/api/roulette/spin`, `/api/roulette/history`, and `/api/chat`.
+- `api/index.py` — Vercel-native serverless Python handler that routes API requests and mounts SQLite in `/tmp` with pre-seeded topics.
+- `vercel.json` — Route rewrite configuration for Vercel serverless functions and frontend static assets.
+- `server.py` — Local standalone Python 3 backend (`http.server` + `urllib.request` + `sqlite3`) that persists `roulette_lessons` and `learning_topics`, applies the 11-part lesson prompt structure, and serves `/api/learning-topics`, `/api/roulette/spin`, `/api/roulette/history`, and `/api/chat`.
 - `public/index.html` — Responsive frontend with **AI Companion (LLM)** mode, **Daily Roulette** with interactive wheel and Communication Module dashboard, filters, topic review, and interactive follow-ups ("Practice Exercise", "Test My Understanding").
