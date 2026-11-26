@@ -1,0 +1,1999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agora — Personal Knowledge &amp; Learning Companion</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: #F7F4EF;
+      color: #1F1D1A;
+    }
+    .font-serif-editorial {
+      font-family: 'Newsreader', Georgia, serif;
+    }
+    .chat-scroll::-webkit-scrollbar {
+      width: 6px;
+    }
+    .chat-scroll::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .chat-scroll::-webkit-scrollbar-thumb {
+      background: #D6CFC4;
+      border-radius: 999px;
+    }
+    .prose-agora h1, .prose-agora h2, .prose-agora h3 {
+      font-family: 'Inter', system-ui, sans-serif;
+      font-weight: 600;
+      color: #1F1D1A;
+      margin-top: 0.95rem;
+      margin-bottom: 0.35rem;
+      line-height: 1.35;
+    }
+    .prose-agora h1 { font-size: 1.15rem; }
+    .prose-agora h2 { font-size: 1.02rem; color: #7C3D25; }
+    .prose-agora h3 { font-size: 0.94rem; }
+    .prose-agora p { margin-bottom: 0.6rem; }
+    .prose-agora p:last-child { margin-bottom: 0; }
+    .prose-agora ul, .prose-agora ol {
+      margin: 0.45rem 0 0.7rem 1.25rem;
+    }
+    .prose-agora ul { list-style-type: disc; }
+    .prose-agora ol { list-style-type: decimal; }
+    .prose-agora li { margin-bottom: 0.25rem; }
+    .prose-agora blockquote {
+      border-left: 3px solid #B85D3B;
+      padding-left: 0.75rem;
+      margin: 0.6rem 0;
+      color: #4A433B;
+      font-style: italic;
+    }
+    .prose-agora code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.82em;
+      background-color: #EFE9DF;
+      padding: 0.12rem 0.35rem;
+      border-radius: 0.3rem;
+      color: #7C3D25;
+    }
+    .prose-agora pre {
+      background-color: #1F1D1A;
+      color: #F7F4EF;
+      padding: 0.75rem 0.9rem;
+      border-radius: 0.75rem;
+      overflow-x: auto;
+      margin: 0.65rem 0;
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+    .prose-agora pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+    @keyframes pulseDot {
+      0%, 80%, 100% { opacity: 0.25; transform: scale(0.85); }
+      40% { opacity: 1; transform: scale(1); }
+    }
+    .dot-1 { animation: pulseDot 1.2s infinite 0s; }
+    .dot-2 { animation: pulseDot 1.2s infinite 0.2s; }
+    .dot-3 { animation: pulseDot 1.2s infinite 0.4s; }
+    @keyframes revealPop {
+      0% { opacity: 0; transform: translateY(6px) scale(0.97); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    .reveal-pop {
+      animation: revealPop 0.35s ease-out forwards;
+    }
+  </style>
+</head>
+<body class="h-screen flex flex-col overflow-hidden">
+
+  <!-- Top Navigation -->
+  <header class="bg-[#1F1D1A] text-[#F7F4EF] border-b border-[#34302A] shrink-0 z-30">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2.5">
+      <div class="flex items-center gap-3">
+        <button id="btn-toggle-sidebar" type="button" aria-label="Toggle learning sidebar"
+          class="lg:hidden p-2 rounded-lg bg-[#2E2A25] hover:bg-[#3B3630] text-[#E6E0D6] border border-[#423D36]">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <div class="w-9 h-9 rounded-xl bg-[#B85D3B] flex items-center justify-center text-white font-serif-editorial text-lg font-semibold shadow-sm">
+          A
+        </div>
+        <div>
+          <h1 class="text-base sm:text-lg font-semibold tracking-tight leading-tight">Agora</h1>
+          <p class="text-[11px] text-[#BFB8AC]">Personal Knowledge &amp; Learning Companion</p>
+        </div>
+      </div>
+
+      <!-- Primary View Switcher -->
+      <div class="inline-flex rounded-lg bg-[#2E2A25] p-1 border border-[#423D36]" role="tablist" aria-label="Workspace View">
+        <button id="btn-view-chat" type="button"
+          class="px-3 py-1.5 rounded-md text-xs font-medium transition-colors bg-[#B85D3B] text-white">
+          Chat Companion
+        </button>
+        <button id="btn-view-roulette" type="button"
+          class="px-3 py-1.5 rounded-md text-xs font-medium transition-colors text-[#D6CFC4] hover:text-white">
+          Daily Roulette
+        </button>
+      </div>
+
+      <!-- Mode Switcher & New Chat -->
+      <div class="flex items-center gap-2 flex-wrap">
+        <div class="inline-flex rounded-lg bg-[#2E2A25] p-1 border border-[#423D36]" role="group" aria-label="Engine Mode">
+          <button id="btn-mode-llm" type="button"
+            class="px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors bg-[#2C5E4F] text-white">
+            AI Companion (LLM)
+          </button>
+          <button id="btn-mode-rule" type="button"
+            class="px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors text-[#D6CFC4] hover:text-white">
+            Rule-Based Demo
+          </button>
+        </div>
+        <button id="btn-new-chat" type="button"
+          class="px-3 py-1.5 rounded-lg text-xs font-medium bg-[#2E2A25] hover:bg-[#3B3630] text-[#E6E0D6] border border-[#423D36] transition-colors">
+          + New Chat
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Layout -->
+  <div class="flex-1 flex max-w-7xl w-full mx-auto overflow-hidden relative">
+
+    <!-- Mobile Backdrop -->
+    <div id="sidebar-backdrop" class="hidden fixed inset-0 bg-black/40 z-20 lg:hidden"></div>
+
+    <!-- LEFT SIDEBAR -->
+    <aside id="learning-sidebar"
+      class="fixed lg:static inset-y-0 left-0 z-30 w-72 sm:w-80 lg:w-72 xl:w-80 bg-[#FAF8F4] border-r border-[#E5DFD5] flex flex-col transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-out h-full">
+
+      <div class="p-4 border-b border-[#EDE8DF] flex items-center justify-between lg:hidden">
+        <span class="text-xs font-semibold uppercase tracking-wider text-[#6D655B]">Learning Companion</span>
+        <button id="btn-close-sidebar" type="button" class="text-xs text-[#6D655B] hover:text-[#1F1D1A]">Close</button>
+      </div>
+
+      <div class="flex-1 overflow-y-auto chat-scroll p-4 space-y-5">
+
+        <!-- Daily Knowledge Roulette Quick Entry -->
+        <section class="p-3.5 rounded-2xl bg-[#1F1D1A] text-[#F7F4EF] shadow-sm space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-semibold uppercase tracking-wider text-[#E59B7E]">Spin &amp; Discover</span>
+            <span id="sidebar-roulette-badge" class="text-[10px] px-2 py-0.5 rounded-full bg-[#2E2A25] text-[#D6CFC4]">Daily</span>
+          </div>
+          <h2 class="font-serif-editorial text-base font-semibold leading-snug">Daily Knowledge Roulette</h2>
+          <p class="text-xs text-[#BFB8AC] leading-relaxed">Spin the 6-category wheel for a surprising lesson you haven't explored yet.</p>
+          <button id="btn-sidebar-roulette" type="button"
+            class="w-full py-2 px-3 rounded-xl bg-[#B85D3B] hover:bg-[#A34F30] text-white text-xs font-medium transition-colors">
+            Open Knowledge Wheel
+          </button>
+        </section>
+
+        <!-- Daily Concept Card -->
+        <section class="p-3.5 rounded-2xl bg-white border border-[#E5DFD5] shadow-sm space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-[10px] font-semibold uppercase tracking-wider text-[#B85D3B]">Daily Concept</span>
+            <span id="daily-concept-category" class="text-[10px] px-2 py-0.5 rounded-full bg-[#F3EFE8] text-[#5C554C] font-medium"></span>
+          </div>
+          <h2 id="daily-concept-title" class="font-serif-editorial text-base font-semibold text-[#1F1D1A] leading-snug"></h2>
+          <p id="daily-concept-teaser" class="text-xs text-[#5C554C] leading-relaxed"></p>
+          <button id="btn-daily-concept" type="button"
+            class="w-full py-2 px-3 rounded-xl bg-[#1F1D1A] hover:bg-[#34302A] text-white text-xs font-medium transition-colors">
+            Explore Today's Concept
+          </button>
+        </section>
+
+        <!-- Learning Tools -->
+        <section class="space-y-2">
+          <h3 class="text-[11px] font-semibold uppercase tracking-wider text-[#7A7267]">Learning Tools</h3>
+          <button id="btn-random-topic" type="button"
+            class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl bg-white hover:bg-[#F1ECE3] border border-[#E5DFD5] text-xs font-medium text-[#1F1D1A] transition-colors">
+            <span>Explore Something Random</span>
+            <span class="text-[#B85D3B]">&#8594;</span>
+          </button>
+          <button id="btn-open-compare" type="button"
+            class="w-full flex items-center justify-between px-3 py-2.5 rounded-xl bg-white hover:bg-[#F1ECE3] border border-[#E5DFD5] text-xs font-medium text-[#1F1D1A] transition-colors">
+            <span>Compare Two Ideas</span>
+            <span class="text-[#2C5E4F]">&#8644;</span>
+          </button>
+        </section>
+
+        <!-- Learning History -->
+        <section class="space-y-2">
+          <div class="flex items-center justify-between">
+            <h3 class="text-[11px] font-semibold uppercase tracking-wider text-[#7A7267]">Chat History</h3>
+            <button id="btn-clear-history" type="button"
+              class="text-[11px] text-[#8C7A68] hover:text-[#B85D3B] transition-colors">
+              Clear
+            </button>
+          </div>
+          <div id="learning-history-list" class="space-y-1.5">
+            <!-- Populated by JS -->
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Backend Status & Optional Preview Key Footer -->
+      <div class="p-3.5 border-t border-[#EDE8DF] bg-[#F3EFE8] text-[11px] text-[#5C554C] space-y-2">
+        <div class="flex items-center gap-2">
+          <span id="backend-status-dot" class="w-2 h-2 rounded-full bg-[#8C7A68] shrink-0"></span>
+          <span id="backend-status-text" class="truncate">Checking AI backend...</span>
+        </div>
+        <div id="preview-key-box" class="space-y-1.5">
+          <div class="flex gap-1.5">
+            <input id="preview-api-key-input" type="password" autocomplete="off"
+              placeholder="Paste Gemini API key for preview..."
+              class="flex-1 min-w-0 px-2.5 py-1.5 text-[11px] rounded-lg border border-[#D8D0C4] bg-white focus:outline-none focus:ring-1 focus:ring-[#2C5E4F]" />
+            <button id="btn-apply-preview-key" type="button"
+              class="px-2.5 py-1.5 rounded-lg bg-[#2C5E4F] hover:bg-[#234C3F] text-white text-[11px] font-medium shrink-0">
+              Connect
+            </button>
+          </div>
+          <p class="text-[10px] text-[#7A7267]">Kept in memory only for personal testing.</p>
+        </div>
+      </div>
+    </aside>
+
+    <!-- VIEW 1: CHAT COMPANION -->
+    <main id="view-chat" class="flex-1 flex flex-col bg-white lg:my-4 lg:mr-4 lg:rounded-2xl lg:border lg:border-[#E5DFD5] lg:shadow-sm overflow-hidden">
+
+      <div class="px-4 sm:px-6 py-2.5 bg-[#FAF8F4] border-b border-[#EDE8DF] flex items-center justify-between gap-2 text-xs shrink-0">
+        <div class="flex items-center gap-2 min-w-0">
+          <span id="mode-dot" class="w-2 h-2 rounded-full bg-[#2C5E4F] shrink-0"></span>
+          <span id="mode-label" class="font-medium text-[#3A352F] truncate">
+            AI Companion Mode — context-aware explanations across 7 knowledge domains
+          </span>
+        </div>
+        <button id="btn-toggle-topics" type="button"
+          class="px-2.5 py-1 rounded-lg bg-white hover:bg-[#EFE9DF] border border-[#DFD7CA] text-[11px] font-medium text-[#4B453D] shrink-0">
+          Browse Topics
+        </button>
+      </div>
+
+      <!-- Collapsible Topic Explorer -->
+      <div id="topic-explorer" class="hidden border-b border-[#EDE8DF] bg-[#FCFBF9] px-4 sm:px-6 py-3.5 shrink-0">
+        <div class="flex items-center justify-between mb-2.5">
+          <span class="text-xs font-semibold text-[#1F1D1A]">Choose a Subject to Explore</span>
+          <button id="btn-close-topics" type="button" class="text-xs text-[#7A7267] hover:text-[#1F1D1A]">Hide</button>
+        </div>
+        <div id="category-tabs" class="flex flex-wrap gap-1.5 mb-3"></div>
+        <div id="category-questions" class="flex flex-wrap gap-2"></div>
+      </div>
+
+      <!-- Messages Container -->
+      <div id="chat-messages" class="flex-1 overflow-y-auto chat-scroll px-4 sm:px-6 py-5 space-y-5"></div>
+
+      <!-- Contextual Follow-Up Bar -->
+      <div id="followup-bar" class="hidden px-4 sm:px-6 py-2 bg-[#FAF8F4] border-t border-[#EDE8DF] flex flex-wrap items-center gap-2 shrink-0">
+        <span class="text-[11px] font-medium text-[#7A7267] mr-1">Continue learning:</span>
+        <button id="btn-ask-deeper" type="button"
+          class="px-2.5 py-1 rounded-full text-xs bg-white hover:bg-[#EFE9DF] text-[#1F1D1A] border border-[#DFD7CA] transition-colors">
+          Ask Deeper
+        </button>
+        <button id="btn-explain-beginner" type="button"
+          class="px-2.5 py-1 rounded-full text-xs bg-white hover:bg-[#EFE9DF] text-[#1F1D1A] border border-[#DFD7CA] transition-colors">
+          Explain Like I'm a Beginner
+        </button>
+        <button id="btn-connect-subject" type="button"
+          class="px-2.5 py-1 rounded-full text-xs bg-white hover:bg-[#EFE9DF] text-[#1F1D1A] border border-[#DFD7CA] transition-colors">
+          Connect to Another Subject
+        </button>
+      </div>
+
+      <!-- Input Form -->
+      <form id="chat-form" class="p-3 sm:p-4 bg-white border-t border-[#EDE8DF] flex items-center gap-2.5 shrink-0">
+        <input id="user-input" type="text" autocomplete="off"
+          placeholder="Ask anything—why humans fear death, how Rome began, what consciousness is..."
+          class="flex-1 px-4 py-2.5 text-sm rounded-xl border border-[#D8D0C4] bg-[#FCFBF9] focus:outline-none focus:ring-2 focus:ring-[#2C5E4F]/30 focus:border-[#2C5E4F]" />
+        <button id="btn-send" type="submit"
+          class="px-5 py-2.5 rounded-xl bg-[#1F1D1A] hover:bg-[#34302A] disabled:opacity-50 text-white text-sm font-medium transition-colors shrink-0">
+          Send
+        </button>
+      </form>
+    </main>
+
+    <!-- VIEW 2: DAILY KNOWLEDGE ROULETTE -->
+    <section id="view-roulette" class="hidden flex-1 overflow-y-auto chat-scroll bg-white lg:my-4 lg:mr-4 lg:rounded-2xl lg:border lg:border-[#E5DFD5] lg:shadow-sm p-4 sm:p-7 space-y-8">
+
+      <!-- Roulette Header & Wheel -->
+      <div class="max-w-3xl mx-auto text-center space-y-3">
+        <span class="inline-block px-3 py-1 rounded-full bg-[#FAF8F4] border border-[#E5DFD5] text-[11px] font-semibold uppercase tracking-wider text-[#B85D3B]">
+          Daily Knowledge Roulette — Spin &amp; Discover
+        </span>
+        <h2 class="font-serif-editorial text-2xl sm:text-3xl font-semibold text-[#1F1D1A]">
+          Make learning an adventure, not a task.
+        </h2>
+        <p class="text-sm text-[#5C554C] max-w-xl mx-auto">
+          Spin the wheel to land on one of six subjects. Agora will uncover a lesser-known, fascinating topic and explain it in clear, everyday English.
+        </p>
+      </div>
+
+      <!-- Interactive Spinning Wheel -->
+      <div class="max-w-xl mx-auto flex flex-col items-center space-y-5">
+        <div class="relative w-72 h-72 sm:w-80 sm:h-80 flex items-center justify-center">
+          <!-- Top Pointer -->
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 z-20 drop-shadow">
+            <svg width="28" height="24" viewBox="0 0 28 24">
+              <polygon points="14,24 2,2 26,2" fill="#1F1D1A" stroke="#F7F4EF" stroke-width="2" />
+            </svg>
+          </div>
+
+          <!-- Wheel SVG -->
+          <div id="roulette-wheel"
+            class="w-full h-full rounded-full shadow-lg border-4 border-[#1F1D1A] overflow-hidden"
+            style="transform: rotate(0deg); transition: transform 4.2s cubic-bezier(0.17, 0.67, 0.12, 0.99);">
+            <svg id="wheel-svg" viewBox="0 0 320 320" class="w-full h-full"></svg>
+          </div>
+
+          <!-- Center Hub -->
+          <div class="absolute w-14 h-14 rounded-full bg-[#1F1D1A] border-4 border-[#F7F4EF] shadow-md flex items-center justify-center z-10">
+            <span class="font-serif-editorial text-white text-lg font-semibold">A</span>
+          </div>
+        </div>
+
+        <!-- Spin Controls -->
+        <div class="flex flex-wrap items-center justify-center gap-3">
+          <button id="btn-spin-official" type="button"
+            class="px-7 py-3 rounded-xl bg-[#B85D3B] hover:bg-[#9F4D2F] disabled:opacity-50 text-white text-sm font-semibold tracking-wide shadow-sm transition-colors">
+            SPIN FOR TODAY'S TOPIC
+          </button>
+          <button id="btn-spin-practice" type="button"
+            class="px-5 py-3 rounded-xl bg-[#FAF8F4] hover:bg-[#EFE9DF] disabled:opacity-50 text-[#1F1D1A] border border-[#D8D0C4] text-sm font-medium transition-colors">
+            Practice Spin
+          </button>
+        </div>
+        <p id="roulette-status-note" class="text-xs text-[#6D655B] text-center">
+          One official daily spin per calendar day. Use Practice Spin anytime without replacing today's official topic.
+        </p>
+      </div>
+
+      <!-- Selected Category Reveal & Generated Lesson -->
+      <div id="roulette-lesson-area" class="hidden max-w-3xl mx-auto space-y-5">
+        <div id="roulette-reveal-banner" class="reveal-pop p-4 rounded-2xl bg-[#FAF8F4] border border-[#E5DFD5] flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <div class="flex items-center gap-2">
+              <span id="lesson-type-badge" class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#2C5E4F] text-white"></span>
+              <span id="lesson-date-label" class="text-xs text-[#6D655B]"></span>
+            </div>
+            <h3 id="lesson-category-heading" class="font-serif-editorial text-xl font-semibold text-[#1F1D1A] mt-1"></h3>
+          </div>
+          <span id="lesson-topic-pill" class="text-xs font-medium px-3 py-1.5 rounded-xl bg-white border border-[#DFD7CA] text-[#3A352F]"></span>
+        </div>
+
+        <!-- Loading or Article Card -->
+        <div id="roulette-article-card" class="p-5 sm:p-7 rounded-2xl bg-[#FAF8F4] border border-[#E5DFD5] shadow-sm">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- 6 Learning Interaction Buttons -->
+        <div id="roulette-actions" class="hidden space-y-3">
+          <p class="text-xs font-semibold uppercase tracking-wider text-[#6D655B]">Continue Exploring This Lesson</p>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" data-action="Practice Exercise"
+              class="roulette-action-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-[#9A6B2F] hover:bg-[#855B26] text-white transition-colors shadow-sm">
+              Practice Exercise
+            </button>
+            <button type="button" data-action="Test My Understanding"
+              class="roulette-action-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-[#2C5E4F] hover:bg-[#234C3F] text-white transition-colors shadow-sm">
+              Test My Understanding
+            </button>
+            <button type="button" data-action="Explain More"
+              class="roulette-action-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-white hover:bg-[#EFE9DF] border border-[#DFD7CA] text-[#1F1D1A] transition-colors">
+              Explain More
+            </button>
+            <button type="button" data-action="Explain in Simpler English"
+              class="roulette-action-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-white hover:bg-[#EFE9DF] border border-[#DFD7CA] text-[#1F1D1A] transition-colors">
+              Explain in Simpler English
+            </button>
+            <button type="button" data-action="Give Me Real-Life Examples"
+              class="roulette-action-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-white hover:bg-[#EFE9DF] border border-[#DFD7CA] text-[#1F1D1A] transition-colors">
+              Give Me Real-Life Examples
+            </button>
+            <button type="button" data-action="Tell Me Something More Surprising"
+              class="roulette-action-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-white hover:bg-[#EFE9DF] border border-[#DFD7CA] text-[#1F1D1A] transition-colors">
+              Tell Me Something More Surprising
+            </button>
+            <button type="button" data-action="Quiz Me"
+              class="roulette-action-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-white hover:bg-[#EFE9DF] border border-[#DFD7CA] text-[#1F1D1A] transition-colors">
+              Quiz Me
+            </button>
+            <button type="button" data-action="Explore Related Topics"
+              class="roulette-action-btn px-3.5 py-2 rounded-xl text-xs font-medium bg-white hover:bg-[#EFE9DF] border border-[#DFD7CA] text-[#1F1D1A] transition-colors">
+              Explore Related Topics
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Communication & Negotiation Learning Module Card -->
+      <div class="max-w-3xl mx-auto pt-4 border-t border-[#EDE8DF] space-y-4">
+        <div class="p-5 sm:p-6 rounded-2xl bg-[#FAF8F4] border border-[#E5DFD5] shadow-sm space-y-4">
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#9A6B2F] text-white">Learning Module</span>
+                <span class="text-xs text-[#6D655B]">Under English Vocabulary</span>
+              </div>
+              <h3 class="font-serif-editorial text-lg sm:text-xl font-semibold text-[#1F1D1A] mt-1">Communication, Negotiation &amp; Professional Skills</h3>
+              <p class="text-xs text-[#6D655B] max-w-xl">Master real-life fluency, persuasive negotiation tactics, emotional intelligence, and confident communication for college, interviews, and work.</p>
+            </div>
+            <div class="text-right">
+              <span id="comm-progress-badge" class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-[#EFE9DF] text-[#7C3D25]">0 of 30 Completed</span>
+            </div>
+          </div>
+
+          <!-- Progress Bar -->
+          <div class="w-full bg-[#E5DFD5] rounded-full h-2 overflow-hidden">
+            <div id="comm-progress-bar" class="bg-[#9A6B2F] h-2 rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+
+          <!-- Filters & Action -->
+          <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+            <div class="inline-flex rounded-lg bg-[#EFE9DF] p-1 border border-[#D8D0C4] text-xs" role="tablist">
+              <button id="filter-comm-all" type="button" class="px-2.5 py-1 rounded-md font-medium bg-[#1F1D1A] text-white transition-colors">All (30)</button>
+              <button id="filter-comm-negotiation" type="button" class="px-2.5 py-1 rounded-md font-medium text-[#5C554C] hover:text-[#1F1D1A] transition-colors">Negotiation (10)</button>
+              <button id="filter-comm-skills" type="button" class="px-2.5 py-1 rounded-md font-medium text-[#5C554C] hover:text-[#1F1D1A] transition-colors">Communication (20)</button>
+              <button id="filter-comm-uncompleted" type="button" class="px-2.5 py-1 rounded-md font-medium text-[#5C554C] hover:text-[#1F1D1A] transition-colors">Uncompleted</button>
+            </div>
+            <button id="btn-spin-comm-random" type="button" class="px-3.5 py-1.5 rounded-lg text-xs font-medium bg-[#9A6B2F] hover:bg-[#855B26] text-white transition-colors flex items-center gap-1.5 shadow-sm">
+              <span>🎯 Spin Uncompleted Skill</span>
+            </button>
+          </div>
+
+          <!-- Topics Grid -->
+          <div id="comm-topics-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 max-h-72 overflow-y-auto chat-scroll pr-1">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Daily Learning History -->
+      <div class="max-w-3xl mx-auto pt-4 border-t border-[#EDE8DF] space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-serif-editorial text-lg font-semibold text-[#1F1D1A]">Daily Learning History</h3>
+            <p class="text-xs text-[#6D655B]">Revisit past discoveries saved in your database.</p>
+          </div>
+        </div>
+        <div id="roulette-history-list" class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- Compare Two Ideas Modal -->
+  <div id="compare-modal" class="hidden fixed inset-0 z-50 bg-black/45 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl border border-[#E5DFD5] shadow-xl max-w-md w-full p-5 space-y-4">
+      <div class="flex items-center justify-between">
+        <h2 class="font-serif-editorial text-lg font-semibold text-[#1F1D1A]">Compare Two Ideas</h2>
+        <button id="btn-close-compare" type="button" class="text-xs text-[#7A7267] hover:text-[#1F1D1A]">Close</button>
+      </div>
+      <p class="text-xs text-[#5C554C]">
+        Compare any two philosophers, civilizations, scientific theories, religions, or historical events.
+      </p>
+      <div class="flex flex-wrap gap-1.5">
+        <button type="button" data-pair="Stoicism|Existentialism"
+          class="compare-preset px-2.5 py-1 rounded-full text-[11px] bg-[#FAF8F4] hover:bg-[#EFE9DF] border border-[#DFD7CA] text-[#3A352F]">
+          Stoicism vs Existentialism
+        </button>
+        <button type="button" data-pair="Greek Mythology|Hindu Mythology"
+          class="compare-preset px-2.5 py-1 rounded-full text-[11px] bg-[#FAF8F4] hover:bg-[#EFE9DF] border border-[#DFD7CA] text-[#3A352F]">
+          Greek vs Hindu Mythology
+        </button>
+        <button type="button" data-pair="Scientific Theory|Scientific Law"
+          class="compare-preset px-2.5 py-1 rounded-full text-[11px] bg-[#FAF8F4] hover:bg-[#EFE9DF] border border-[#DFD7CA] text-[#3A352F]">
+          Theory vs Law
+        </button>
+        <button type="button" data-pair="Roman Republic|Roman Empire"
+          class="compare-preset px-2.5 py-1 rounded-full text-[11px] bg-[#FAF8F4] hover:bg-[#EFE9DF] border border-[#DFD7CA] text-[#3A352F]">
+          Roman Republic vs Empire
+        </button>
+      </div>
+      <form id="compare-form" class="space-y-3">
+        <div>
+          <label for="compare-a" class="block text-xs font-medium text-[#3A352F] mb-1">First Idea</label>
+          <input id="compare-a" type="text" required placeholder="e.g., Buddhism"
+            class="w-full px-3 py-2 text-sm rounded-xl border border-[#D8D0C4] bg-[#FCFBF9] focus:outline-none focus:ring-2 focus:ring-[#2C5E4F]/30" />
+        </div>
+        <div>
+          <label for="compare-b" class="block text-xs font-medium text-[#3A352F] mb-1">Second Idea</label>
+          <input id="compare-b" type="text" required placeholder="e.g., Stoicism"
+            class="w-full px-3 py-2 text-sm rounded-xl border border-[#D8D0C4] bg-[#FCFBF9] focus:outline-none focus:ring-2 focus:ring-[#2C5E4F]/30" />
+        </div>
+        <div class="flex justify-end gap-2 pt-1">
+          <button id="btn-cancel-compare" type="button"
+            class="px-4 py-2 rounded-xl text-xs font-medium text-[#5C554C] hover:bg-[#F3EFE8]">
+            Cancel
+          </button>
+          <button type="submit"
+            class="px-4 py-2 rounded-xl bg-[#2C5E4F] hover:bg-[#234C3F] text-white text-xs font-medium">
+            Compare Now
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    /* =========================================================================
+       1. CURATED LEARNING CATALOG & ROULETTE CATEGORIES
+       ========================================================================= */
+    const ROULETTE_SLICES = [
+      { name: "Philosophy", color: "#B85D3B" },
+      { name: "Mythology", color: "#2C5E4F" },
+      { name: "Science", color: "#3B5B78" },
+      { name: "English Vocabulary", color: "#9A6B2F" },
+      { name: "World History", color: "#6D4C5C" },
+      { name: "Health Facts", color: "#4A6B4E" }
+    ];
+
+    const TOPIC_CATEGORIES = [
+      {
+        id: "philosophy",
+        name: "Explore Philosophy",
+        questions: [
+          "What is existentialism?",
+          "What is consciousness?",
+          "What did Stoic philosophers actually teach?",
+          "What is the Ship of Theseus paradox?"
+        ]
+      },
+      {
+        id: "history",
+        name: "Discover World History",
+        questions: [
+          "What happened before the Roman Empire?",
+          "Who were the ancient Greeks and why do they still matter?",
+          "Why did World War II happen?",
+          "How did ancient Mesopotamian civilization begin?"
+        ]
+      },
+      {
+        id: "science",
+        name: "Understand Science",
+        questions: [
+          "How did the universe begin?",
+          "What happens inside a black hole?",
+          "What is the difference between a theory and a scientific law?",
+          "How does DNA store instructions for life?"
+        ]
+      },
+      {
+        id: "mythology",
+        name: "Explore Mythology",
+        questions: [
+          "How did Hindu mythology develop?",
+          "What do Greek and Norse creation myths have in common?",
+          "Why did ancient Egyptians build myths around Osiris and Isis?",
+          "Who was Prometheus and what does his story symbolize?"
+        ]
+      },
+      {
+        id: "psychology",
+        name: "Understand Human Psychology",
+        questions: [
+          "Why do we sometimes remember things incorrectly?",
+          "Why do humans fear death?",
+          "What is the Spotlight Effect in everyday life?",
+          "Why do people stick to bad habits even when they know better?"
+        ]
+      },
+      {
+        id: "religion",
+        name: "Questions About God",
+        questions: [
+          "Why do humans believe in God?",
+          "What is the difference between atheism, agnosticism, and theism?",
+          "How do different religions view the relationship between science and faith?",
+          "What are the core ideas shared by Buddhism and Jainism?"
+        ]
+      },
+      {
+        id: "random",
+        name: "Random Interesting Facts",
+        questions: [
+          "Why does time seem to speed up as we get older?",
+          "How did the invention of the printing press reshape human thought?",
+          "Why do humans across every culture make music?",
+          "What is the Overview Effect astronauts experience in space?"
+        ]
+      },
+      {
+        id: "communication",
+        name: "Communication & Negotiation",
+        questions: [
+          "How do I respond effectively to a lowball offer without losing my position?",
+          "What is BATNA and how do I determine mine before entering a negotiation?",
+          "How can I use 'No-Oriented Questions' to lower defenses in difficult conversations?",
+          "How do I say 'no' at work or to clients without feeling guilty or sounding unprofessional?"
+        ]
+      }
+    ];
+
+    const DAILY_CONCEPTS = [
+      {
+        category: "English Vocabulary • Negotiation",
+        title: "The Walk-Away & BATNA",
+        teaser: "Why the greatest leverage in any negotiation is having a clear alternative and the polite resolve to walk away.",
+        prompt: "Teach me about BATNA (Best Alternative to a Negotiated Agreement) and The Walk-Away tactic in negotiation. Follow the 11-part lesson structure with real-life examples and practical exercises."
+      },
+      {
+        category: "Philosophy",
+        title: "Existentialism",
+        teaser: "Why thinkers argued that we aren't born with a fixed purpose—we build it through our choices.",
+        prompt: "What is existentialism? Explain it simply with its history, key thinkers, everyday example, and a question to think about."
+      },
+      {
+        category: "Psychology",
+        title: "False Memory & Reconstructive Recall",
+        teaser: "Your brain doesn't replay memories like a video—it rebuilds them from scratch every time.",
+        prompt: "Why do we sometimes remember things incorrectly? Explain how human memory actually works."
+      },
+      {
+        category: "World History",
+        title: "Before the Roman Empire",
+        teaser: "How a small Italian city-state became a republic—and why that republic collapsed into an empire.",
+        prompt: "What happened before the Roman Empire? Explain the Roman Republic and how it turned into an empire."
+      },
+      {
+        category: "Science",
+        title: "Theory vs. Scientific Law",
+        teaser: "Why 'just a theory' is actually one of the biggest misunderstandings in everyday English.",
+        prompt: "What is the difference between a theory and a scientific law?"
+      },
+      {
+        category: "Religion & Philosophy",
+        title: "Why Humans Believe in God",
+        teaser: "Exploring evolutionary psychology, philosophy, and spiritual traditions around the world.",
+        prompt: "Why do humans believe in God? Compare historical, psychological, philosophical, and religious perspectives respectfully."
+      },
+      {
+        category: "Science",
+        title: "Inside a Black Hole",
+        teaser: "What happens to space, time, and light when gravity becomes unimaginably strong.",
+        prompt: "What happens inside a black hole? Explain it in simple, vivid English."
+      }
+    ];
+
+    const RANDOM_QUESTIONS = [
+      "Why do humans fear death, and how have different philosophies and religions answered it?",
+      "How did the Indus Valley Civilization organize cities thousands of years ago without obvious kings?",
+      "What is cognitive dissonance, and why do we invent excuses to protect our beliefs?",
+      "How can an idea like zero change the entire history of science and mathematics?",
+      "Why did Norse mythology imagine the end of the world (Ragnarok) differently from other traditions?",
+      "What is emergence—how do simple brain cells create something as mysterious as consciousness?"
+    ];
+
+    const RULE_BASED_KB = [
+      {
+        label: "Existentialism",
+        keywords: ["existential", "meaning of life", "purpose"],
+        reply:
+          "### Simple Meaning\n**Existentialism** is the idea that you aren't born with a pre-written purpose—you create your own meaning through the choices you make.\n\n### Real-Life Connection\nInstead of asking *'What was I meant to do?'*, existentialists like Jean-Paul Sartre asked *'What am I choosing to become right now?'*\n\n*(Note: This is a fixed keyword-matched demo reply. Switch to **AI Companion (LLM)** mode for full conversational intelligence and follow-ups.)*"
+      },
+      {
+        label: "Ship of Theseus",
+        keywords: ["identity", "theseus", "ship", "same person"],
+        reply:
+          "### Simple Meaning\nThe **Ship of Theseus** asks: if every plank of a wooden ship is replaced one by one, is it still the same ship?\n\n### Everyday Connection\nYour cells, habits, and beliefs change over the years—yet you still feel like the same 'you'.\n\n*(Note: This is a fixed keyword-matched demo reply. Switch to **AI Companion (LLM)** mode to explore follow-up questions.)*"
+      },
+      {
+        label: "Spotlight Effect",
+        keywords: ["spotlight", "watching", "embarrass", "psychology"],
+        reply:
+          "### Simple Meaning\nThe **Spotlight Effect** is our tendency to overestimate how much other people notice our mistakes or awkward moments.\n\n### Why It Happens\nWe are at the center of our own experience, so we forget that everyone else is mostly focused on their own worries.\n\n*(Note: This is a fixed keyword-matched demo reply. Switch to **AI Companion (LLM)** mode for deeper psychology explanations.)*"
+      },
+      {
+        label: "Roman History",
+        keywords: ["roman", "caesar", "augustus", "rome"],
+        reply:
+          "### Simple Meaning\nBefore becoming an empire, Rome was a **Republic** ruled by elected officials and a Senate for nearly 500 years.\n\n### Key Distinction\n**Julius Caesar** was a powerful general and dictator, but his adopted son **Augustus** became the first true Roman Emperor.\n\n*(Note: This is a fixed keyword-matched demo reply. Switch to **AI Companion (LLM)** mode to ask follow-ups like 'Why was Caesar famous?'.)*"
+      }
+    ];
+
+    /* =========================================================================
+       2. APPLICATION STATE & STORAGE
+       ========================================================================= */
+    const STORAGE_KEY = "agora_learning_history_v1";
+    const ROULETTE_STORAGE_KEY = "agora_roulette_history_v1";
+    const canUseBackend =
+      window.location.protocol.startsWith("http") && window.location.hostname !== "";
+
+    const state = {
+      activeView: "chat", // "chat" | "roulette"
+      mode: "llm",        // "llm" | "rule"
+      backendHealthy: false,
+      hasApiKey: false,
+      previewApiKey: "", 
+      isLoading: false,
+      isSpinning: false,
+      wheelRotation: 0,
+      activeCategoryId: TOPIC_CATEGORIES[0].id,
+      currentSessionId: null,
+      messages: [],
+      history: [],
+      rouletteHistory: [],
+      officialToday: null,
+      activeLesson: null,
+      learningTopics: [],
+      activeCommFilter: "all"
+    };
+
+    const DEFAULT_COMMUNICATION_TOPICS = [
+      { module: "Negotiation Tactics", topic: "The Lowball", description: "Understanding low initial offers and how to respond without losing your negotiating position." },
+      { module: "Negotiation Tactics", topic: "The Walk-Away", description: "Knowing when to leave a negotiation politely and protect your interests." },
+      { module: "Negotiation Tactics", topic: "Bracketing", description: "Keeping your target price in the middle while negotiating." },
+      { module: "Negotiation Tactics", topic: "The Nibble", description: "Recognising small additional demands and handling them professionally." },
+      { module: "Negotiation Tactics", topic: "The Vise", description: "Responding to pressure such as 'You\\'ll have to do better than that.'" },
+      { module: "Negotiation Tactics", topic: "Trading Concessions", description: "Making progressively smaller concessions instead of giving everything away." },
+      { module: "Negotiation Tactics", topic: "BATNA (Best Alternative to a Negotiated Agreement)", description: "Understanding your best alternative when an agreement cannot be reached." },
+      { module: "Negotiation Tactics", topic: "ZOPA (Zone of Possible Agreement)", description: "Identifying the range in which both parties can reach an agreement." },
+      { module: "Negotiation Tactics", topic: "The Ackerman Model", description: "Understanding a structured negotiation strategy involving calculated offers and counteroffers." },
+      { module: "Negotiation Tactics", topic: "The No-Oriented Question", description: "Using questions that make people comfortable expressing disagreement and explaining their position." },
+      { module: "Communication Skills", topic: "Active Listening", description: "Listening to understand rather than just waiting to speak, using verbal and non-verbal cues." },
+      { module: "Communication Skills", topic: "Assertive Communication", description: "Expressing needs, boundaries, and opinions clearly and respectfully without being aggressive or passive." },
+      { module: "Communication Skills", topic: "Persuasive Communication", description: "Structuring arguments using logic, emotion, and credibility (Ethos, Pathos, Logos) to influence others ethically." },
+      { module: "Communication Skills", topic: "Emotional Intelligence", description: "Recognizing, understanding, and managing emotions in yourself and during interactions with others." },
+      { module: "Communication Skills", topic: "Conflict Resolution", description: "De-escalating tension and resolving disagreements by focusing on shared interests rather than entrenched positions." },
+      { module: "Communication Skills", topic: "Handling Difficult Conversations", description: "Navigating high-stakes, sensitive, or uncomfortable discussions with composure, empathy, and clarity." },
+      { module: "Communication Skills", topic: "Asking Powerful Questions", description: "Formulating open-ended, insightful questions that uncover hidden motivations and provoke thoughtful dialogue." },
+      { module: "Communication Skills", topic: "Body Language and Non-Verbal Communication", description: "Mastering posture, eye contact, gestures, tone of voice, and micro-expressions to convey warmth and authority." },
+      { module: "Communication Skills", topic: "Building Rapport", description: "Establishing genuine trust, common ground, and positive emotional connection quickly and authentically." },
+      { module: "Communication Skills", topic: "Public Speaking", description: "Overcoming stage anxiety, organizing spoken presentations, and engaging audiences with poise." },
+      { module: "Communication Skills", topic: "Storytelling Skills", description: "Using narrative arcs, relatable characters, and vivid imagery to make complex ideas memorable and engaging." },
+      { module: "Communication Skills", topic: "Critical Thinking in Conversations", description: "Evaluating arguments objectively, detecting logical fallacies, and questioning assumptions without being combative." },
+      { module: "Communication Skills", topic: "Professional Etiquette", description: "Mastering executive communication, meeting decorum, email clarity, and workplace professionalism." },
+      { module: "Communication Skills", topic: "Giving and Receiving Feedback", description: "Delivering constructive feedback with psychological safety and receiving critique without becoming defensive." },
+      { module: "Communication Skills", topic: "Handling Rejection", description: "Responding to 'no' with grace, resilience, and curiosity, maintaining relationships for future opportunities." },
+      { module: "Communication Skills", topic: "Thinking Before Responding", description: "Developing the habit of deliberate pausing, emotional self-regulation, and composing thoughtful replies under pressure." },
+      { module: "Communication Skills", topic: "Saying No Without Feeling Guilty", description: "Setting firm personal and professional boundaries gracefully, clearly, and without over-apologizing." },
+      { module: "Communication Skills", topic: "Communicating with Confidence", description: "Projecting self-assurance, vocal variety, clear articulation, and presence in high-stakes environments." },
+      { module: "Communication Skills", topic: "Interview Communication Skills", description: "Framing career narratives, handling behavioral questions (STAR method), and establishing rapport with interviewers." },
+      { module: "Communication Skills", topic: "Client Communication and Relationship Management", description: "Managing expectations, communicating progress transparently, handling scope disputes, and nurturing long-term client trust." }
+    ];
+
+    function getLocalDateStr() {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
+
+    function loadStorage() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed)) state.history = parsed;
+        }
+      } catch (_) {
+        state.history = [];
+      }
+      try {
+        const rawR = localStorage.getItem(ROULETTE_STORAGE_KEY);
+        if (rawR) {
+          const parsedR = JSON.parse(rawR);
+          if (Array.isArray(parsedR)) {
+            state.rouletteHistory = parsedR;
+            const today = getLocalDateStr();
+            state.officialToday = parsedR.find((r) => r.spinDate === today && r.isOfficial) || null;
+          }
+        }
+      } catch (_) {
+        state.rouletteHistory = [];
+      }
+    }
+
+    function saveHistoryToStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state.history.slice(0, 20)));
+      } catch (_) {}
+    }
+
+    function saveRouletteToStorage() {
+      try {
+        localStorage.setItem(ROULETTE_STORAGE_KEY, JSON.stringify(state.rouletteHistory.slice(0, 50)));
+      } catch (_) {}
+    }
+
+    function getTodaysConcept() {
+      const now = new Date();
+      const dayIndex =
+        (now.getFullYear() * 366 + now.getMonth() * 31 + now.getDate()) %
+        DAILY_CONCEPTS.length;
+      return DAILY_CONCEPTS[dayIndex];
+    }
+
+    /* =========================================================================
+       3. MARKDOWN RENDERER
+       ========================================================================= */
+    function renderMarkdown(rawText) {
+      const escaped = rawText
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+
+      const codeBlocks = [];
+      let text = escaped.replace(/```(\w*)\n([\s\S]*?)```/g, (_, _lang, code) => {
+        const idx = codeBlocks.length;
+        codeBlocks.push(`<pre><code>${code.trimEnd()}</code></pre>`);
+        return `@@CODEBLOCK_${idx}@@`;
+      });
+
+      const lines = text.split("\n");
+      const htmlParts = [];
+      let inUl = false;
+      let inOl = false;
+
+      function closeLists() {
+        if (inUl) { htmlParts.push("</ul>"); inUl = false; }
+        if (inOl) { htmlParts.push("</ol>"); inOl = false; }
+      }
+
+      function formatInline(str) {
+        return str
+          .replace(/`([^`]+)`/g, "<code>$1</code>")
+          .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+          .replace(/\*(.+?)\*/g, "<em>$1</em>");
+      }
+
+      for (const line of lines) {
+        const trimmed = line.trim();
+        if (!trimmed) { closeLists(); continue; }
+        if (trimmed.startsWith("@@CODEBLOCK_")) {
+          closeLists();
+          htmlParts.push(trimmed);
+          continue;
+        }
+        if (trimmed.startsWith("### ")) {
+          closeLists();
+          htmlParts.push(`<h3>${formatInline(trimmed.slice(4))}</h3>`);
+        } else if (trimmed.startsWith("## ")) {
+          closeLists();
+          htmlParts.push(`<h2>${formatInline(trimmed.slice(3))}</h2>`);
+        } else if (trimmed.startsWith("# ")) {
+          closeLists();
+          htmlParts.push(`<h1>${formatInline(trimmed.slice(2))}</h1>`);
+        } else if (trimmed.startsWith("&gt; ")) {
+          closeLists();
+          htmlParts.push(`<blockquote>${formatInline(trimmed.slice(5))}</blockquote>`);
+        } else if (/^[-*]\s+/.test(trimmed)) {
+          if (inOl) { htmlParts.push("</ol>"); inOl = false; }
+          if (!inUl) { htmlParts.push("<ul>"); inUl = true; }
+          htmlParts.push(`<li>${formatInline(trimmed.replace(/^[-*]\s+/, ""))}</li>`);
+        } else if (/^\d+\.\s+/.test(trimmed)) {
+          if (inUl) { htmlParts.push("</ul>"); inUl = false; }
+          if (!inOl) { htmlParts.push("<ol>"); inOl = true; }
+          htmlParts.push(`<li>${formatInline(trimmed.replace(/^\d+\.\s+/, ""))}</li>`);
+        } else {
+          closeLists();
+          htmlParts.push(`<p>${formatInline(trimmed)}</p>`);
+        }
+      }
+      closeLists();
+
+      let output = htmlParts.join("\n");
+      codeBlocks.forEach((block, idx) => {
+        output = output.replace(`@@CODEBLOCK_${idx}@@`, block);
+      });
+      return output;
+    }
+
+    /* =========================================================================
+       4. BACKEND HEALTH & API CALLS
+       ========================================================================= */
+    async function checkBackendHealth() {
+      const dot = document.getElementById("backend-status-dot");
+      const text = document.getElementById("backend-status-text");
+
+      if (!canUseBackend) {
+        state.backendHealthy = false;
+        state.hasApiKey = false;
+        dot.className = "w-2 h-2 rounded-full bg-[#B85D3B] shrink-0";
+        text.textContent = "Preview mode: start server.py for live AI";
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/health");
+        if (!res.ok) throw new Error("Health check failed");
+        const data = await res.json();
+        state.backendHealthy = true;
+        state.hasApiKey = Boolean(data.hasApiKey);
+        if (state.hasApiKey) {
+          dot.className = "w-2 h-2 rounded-full bg-[#2C5E4F] shrink-0";
+          text.textContent = `Live AI ready (${data.model})`;
+        } else {
+          dot.className = "w-2 h-2 rounded-full bg-[#D97706] shrink-0";
+          text.textContent = "Backend running — GEMINI_API_KEY needed";
+        }
+        await loadRouletteHistoryFromServer();
+      } catch (_) {
+        state.backendHealthy = false;
+        state.hasApiKey = false;
+        dot.className = "w-2 h-2 rounded-full bg-[#B85D3B] shrink-0";
+        text.textContent = "Backend offline — run server.py";
+      }
+    }
+
+    async function loadRouletteHistoryFromServer() {
+      if (!canUseBackend || !state.backendHealthy) return;
+      try {
+        const res = await fetch("/api/roulette/history");
+        if (!res.ok) return;
+        const data = await res.json();
+        if (Array.isArray(data.history)) {
+          state.rouletteHistory = data.history;
+          state.officialToday = data.officialToday || null;
+          saveRouletteToStorage();
+          if (state.officialToday && !state.activeLesson) {
+            state.activeLesson = state.officialToday;
+          }
+          renderRouletteState();
+        }
+        await loadLearningTopicsFromServer();
+      } catch (_) {
+        await loadLearningTopicsFromServer();
+      }
+    }
+
+    async function loadLearningTopicsFromServer() {
+      if (canUseBackend && state.backendHealthy) {
+        try {
+          const res = await fetch("/api/learning-topics");
+          if (res.ok) {
+            const data = await res.json();
+            if (Array.isArray(data.topics)) {
+              state.learningTopics = data.topics;
+              renderLearningTopics();
+              return;
+            }
+          }
+        } catch (_) {}
+      }
+      // Fallback: sync DEFAULT_COMMUNICATION_TOPICS with local history
+      const completedSet = new Set(
+        state.rouletteHistory
+          .filter((r) => r.category === "English Vocabulary")
+          .map((r) => r.topic.trim())
+      );
+      state.learningTopics = DEFAULT_COMMUNICATION_TOPICS.map((item, idx) => ({
+        id: idx + 1,
+        category: "English Vocabulary",
+        module: item.module,
+        topic: item.topic,
+        description: item.description,
+        status: completedSet.has(item.topic.trim()) ? "completed" : "uncompleted"
+      }));
+      renderLearningTopics();
+    }
+
+    function renderLearningTopics() {
+      const grid = document.getElementById("comm-topics-grid");
+      const progressBadge = document.getElementById("comm-progress-badge");
+      const progressBar = document.getElementById("comm-progress-bar");
+      if (!grid) return;
+
+      const topics = state.learningTopics || [];
+      const total = topics.length || 30;
+      const completedCount = topics.filter((t) => t.status === "completed").length;
+      const pct = Math.round((completedCount / total) * 100);
+
+      if (progressBadge) {
+        progressBadge.textContent = `${completedCount} of ${total} Completed`;
+      }
+      if (progressBar) {
+        progressBar.style.width = `${pct}%`;
+      }
+
+      const filter = state.activeCommFilter || "all";
+      const filtered = topics.filter((t) => {
+        if (filter === "negotiation") return t.module === "Negotiation Tactics";
+        if (filter === "skills") return t.module === "Communication Skills";
+        if (filter === "uncompleted") return t.status !== "completed";
+        return true;
+      });
+
+      if (!filtered.length) {
+        grid.innerHTML = `<p class="col-span-full text-xs text-[#8C7A68] italic p-3 text-center">No topics match this filter.</p>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map((item) => {
+        const isDone = item.status === "completed";
+        const isNeg = item.module === "Negotiation Tactics";
+        const badgeColor = isNeg ? "bg-[#7C3D25] text-white" : "bg-[#2C5E4F] text-white";
+        const statusBadge = isDone
+          ? `<span class="text-[10px] px-2 py-0.5 rounded-full bg-[#E2ECE6] text-[#2C5E4F] font-semibold flex items-center gap-1">✓ Done</span>`
+          : `<span class="text-[10px] px-2 py-0.5 rounded-full bg-[#EFE9DF] text-[#7C3D25] font-semibold">Available</span>`;
+
+        return `
+          <div class="p-3 rounded-xl border transition-all ${
+            isDone ? "bg-[#FAF8F4]/70 border-[#E2ECE6]" : "bg-white border-[#E5DFD5] hover:border-[#B85D3B]"
+          } flex flex-col justify-between gap-2 shadow-xs">
+            <div>
+              <div class="flex items-center justify-between gap-1.5 mb-1">
+                <span class="text-[9.5px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded-md ${badgeColor}">
+                  ${isNeg ? "Negotiation" : "Communication"}
+                </span>
+                ${statusBadge}
+              </div>
+              <h4 class="text-xs sm:text-[13px] font-semibold text-[#1F1D1A] leading-snug">${item.topic}</h4>
+              <p class="text-[11px] text-[#6D655B] line-clamp-2 mt-1 leading-relaxed">${item.description}</p>
+            </div>
+            <div class="pt-1.5 flex items-center justify-end">
+              <button type="button" data-topic-name="${item.topic.replace(/"/g, '&quot;')}"
+                class="btn-spin-specific-topic px-2.5 py-1 rounded-md text-[11px] font-medium transition-colors ${
+                  isDone
+                    ? "bg-[#EFE9DF] hover:bg-[#E5DFD5] text-[#4A433B]"
+                    : "bg-[#9A6B2F] hover:bg-[#855B26] text-white shadow-xs"
+                }">
+                ${isDone ? "Review Topic" : "Spin & Learn →"}
+              </button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      grid.querySelectorAll(".btn-spin-specific-topic").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const topicName = btn.getAttribute("data-topic-name");
+          if (topicName) {
+            spinRoulette(false, topicName);
+            document.getElementById("roulette-wheel").scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        });
+      });
+    }
+
+    function getRuleBasedReply(userText) {
+      const clean = userText.toLowerCase();
+      for (const item of RULE_BASED_KB) {
+        const matched = item.keywords.find((kw) => clean.includes(kw));
+        if (matched) {
+          return {
+            text: item.reply,
+            meta: `Rule-Based Demo • Matched keyword "${matched}"`
+          };
+        }
+      }
+      return {
+        text:
+          "No fixed keyword rule matched that phrasing.\n\n" +
+          "Rule-Based Demo mode only recognizes a few pre-written keywords (like **existentialism**, **ship of theseus**, **spotlight**, or **roman**). It cannot understand open-ended questions or remember earlier turns.\n\n" +
+          "Switch to **AI Companion (LLM)** mode at the top for real conversational explanations.",
+        meta: "Rule-Based Demo • No keyword match"
+      };
+    }
+
+    const BROWSER_SYSTEM_PROMPT = `You are Agora, an intelligent personal knowledge and learning companion.
+Explain Philosophy, General Knowledge, Science, World History, Mythology, Religion & Spirituality (respectfully distinguishing beliefs, philosophy, history, and science), Psychology, and English Communication & Negotiation in simple, natural everyday English.
+Start with the simplest meaning, explain unfamiliar words immediately, use relatable everyday examples, connect subjects when helpful, never invent facts or quotes, and prioritize thoughtful, ethical, win-win communication over manipulative tricks.`;
+
+    async function callGeminiDirectInBrowser(systemPrompt, contents, maxTokens = 1400) {
+      const endpoint = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent";
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-goog-api-key": state.previewApiKey
+        },
+        body: JSON.stringify({
+          system_instruction: { parts: [{ text: systemPrompt }] },
+          contents,
+          generationConfig: { temperature: 0.75, maxOutputTokens: maxTokens, thinkingConfig: { thinkingBudget: 1024 } }
+        })
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        const msg = data?.error?.message || `HTTP ${res.status}`;
+        throw new Error(msg);
+      }
+      const parts = data?.candidates?.[0]?.content?.parts || [];
+      const text = parts.map((p) => p.text || "").join("").trim();
+      if (!text) throw new Error("The model returned an empty response.");
+      return { text, usage: data.usageMetadata || {} };
+    }
+
+    async function requestLLMReply(messagesForApi) {
+      if ((!canUseBackend || !state.backendHealthy) && state.previewApiKey) {
+        const contents = messagesForApi.slice(-16).map((m) => ({
+          role: m.role === "assistant" ? "model" : "user",
+          parts: [{ text: m.text }]
+        }));
+        const { text, usage } = await callGeminiDirectInBrowser(BROWSER_SYSTEM_PROMPT, contents, 4096);
+        const tokenNote = usage?.totalTokenCount ? ` • ${usage.totalTokenCount} tokens` : "";
+        return {
+          text,
+          meta: `AI Companion (Direct Preview • gemini-2.5-flash)${tokenNote}`
+        };
+      }
+      if (!canUseBackend || !state.backendHealthy) {
+        return {
+          isSetupNotice: true,
+          text:
+            "### Live AI Backend Not Connected\n" +
+            "Language Model mode sends your conversation to a secure backend (`server.py`) so your API key is never exposed in browser code.\n\n" +
+            "**How to run the full AI-powered Agora:**\n" +
+            "1. Unzip `agora_app.zip` and open that folder in your terminal.\n" +
+            "2. Set your key: `export GEMINI_API_KEY=\"your_key_here\"`\n" +
+            "3. Start the server: `python3 server.py` and open `http://127.0.0.1:8000`\n\n" +
+            "You can also switch to **Rule-Based Demo** at the top right now to test basic keyword matching.",
+          meta: "Setup Required • Backend not running"
+        };
+      }
+
+      const res = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          messages: messagesForApi.map((m) => ({ role: m.role, text: m.text }))
+        })
+      });
+
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) {
+        if (data.error === "API_KEY_MISSING") {
+          return {
+            isSetupNotice: true,
+            text:
+              "### Gemini API Key Needed\n" +
+              "The Agora backend is running, but `GEMINI_API_KEY` is not set.\n\n" +
+              "Set `GEMINI_API_KEY` in your terminal or `.env` file, restart `python3 server.py`, and send your question again.",
+            meta: "Setup Required • Missing GEMINI_API_KEY"
+          };
+        }
+        throw new Error(data.message || `Server returned HTTP ${res.status}`);
+      }
+
+      const tokenNote = data.usage?.totalTokens ? ` • ${data.usage.totalTokens} tokens` : "";
+      const trimNote = data.trimmed ? " • older turns trimmed" : "";
+      return {
+        text: data.reply,
+        meta: `AI Companion (${data.model || "Gemini"})${tokenNote}${trimNote}`
+      };
+    }
+
+    /* =========================================================================
+       5. DAILY KNOWLEDGE ROULETTE WHEEL & LESSON GENERATION
+       ========================================================================= */
+    function drawRouletteWheel() {
+      const svg = document.getElementById("wheel-svg");
+      const cx = 160;
+      const cy = 160;
+      const r = 158;
+      const sliceDeg = 360 / ROULETTE_SLICES.length;
+
+      const paths = ROULETTE_SLICES.map((slice, idx) => {
+        const startAngle = (idx * sliceDeg - 90) * (Math.PI / 180);
+        const endAngle = ((idx + 1) * sliceDeg - 90) * (Math.PI / 180);
+        const x1 = cx + r * Math.cos(startAngle);
+        const y1 = cy + r * Math.sin(startAngle);
+        const x2 = cx + r * Math.cos(endAngle);
+        const y2 = cy + r * Math.sin(endAngle);
+
+        const midDeg = idx * sliceDeg + sliceDeg / 2 - 90;
+        const midRad = midDeg * (Math.PI / 180);
+        const textR = 102;
+        const tx = cx + textR * Math.cos(midRad);
+        const ty = cy + textR * Math.sin(midRad);
+
+        // Split two-word labels cleanly
+        const words = slice.name.split(" ");
+        const labelHtml =
+          words.length > 1
+            ? `<text x="${tx}" y="${ty}" fill="#FFFFFF" font-size="11.5" font-weight="600" text-anchor="middle" dominant-baseline="middle" transform="rotate(${midDeg + 90}, ${tx}, ${ty})">
+                 <tspan x="${tx}" dy="-6">${words[0]}</tspan>
+                 <tspan x="${tx}" dy="13">${words.slice(1).join(" ")}</tspan>
+               </text>`
+            : `<text x="${tx}" y="${ty}" fill="#FFFFFF" font-size="12" font-weight="600" text-anchor="middle" dominant-baseline="middle" transform="rotate(${midDeg + 90}, ${tx}, ${ty})">${slice.name}</text>`;
+
+        return `
+          <path d="M ${cx} ${cy} L ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 0 1 ${x2.toFixed(2)} ${y2.toFixed(2)} Z"
+            fill="${slice.color}" stroke="#F7F4EF" stroke-width="2" />
+          ${labelHtml}
+        `;
+      }).join("");
+
+      svg.innerHTML = paths;
+    }
+
+    async function spinRoulette(isOfficial, targetTopic = null) {
+      if (state.isSpinning) return;
+      if (isOfficial && state.officialToday) {
+        state.activeLesson = state.officialToday;
+        renderRouletteState();
+        return;
+      }
+
+      state.isSpinning = true;
+      document.getElementById("btn-spin-official").disabled = true;
+      document.getElementById("btn-spin-practice").disabled = true;
+
+      // Pick slice index: if targetTopic is specified, align with slice 3 ("English Vocabulary")
+      const sliceCount = ROULETTE_SLICES.length;
+      const sliceDeg = 360 / sliceCount;
+      const chosenIdx = targetTopic ? 3 : Math.floor(Math.random() * sliceCount);
+      const chosenCategory = ROULETTE_SLICES[chosenIdx].name;
+
+      // Align chosen slice center with top pointer (0 deg)
+      const sliceCenterFromTop = chosenIdx * sliceDeg + sliceDeg / 2;
+      const targetMod = (360 - sliceCenterFromTop + 360) % 360;
+      const currentMod = state.wheelRotation % 360;
+      const extraSpins = 360 * 5;
+      const delta = extraSpins + ((targetMod - currentMod + 360) % 360);
+      state.wheelRotation += delta;
+
+      const wheelEl = document.getElementById("roulette-wheel");
+      wheelEl.style.transform = `rotate(${state.wheelRotation}deg)`;
+
+      // Wait for spin animation to finish (4.2s)
+      await new Promise((resolve) => setTimeout(resolve, 4250));
+
+      state.isSpinning = false;
+      showRouletteLoading(chosenCategory, isOfficial);
+
+      if ((!canUseBackend || !state.backendHealthy) && state.previewApiKey) {
+        try {
+          let isComm = false;
+          let commTopic = null;
+          if (chosenCategory === "English Vocabulary") {
+            if (targetTopic) {
+              commTopic = DEFAULT_COMMUNICATION_TOPICS.find((t) => t.topic === targetTopic);
+              if (commTopic) isComm = true;
+            } else {
+              const uncompleted = (state.learningTopics || []).filter((t) => t.status !== "completed");
+              if (uncompleted.length && Math.random() < 0.70) {
+                commTopic = uncompleted[Math.floor(Math.random() * uncompleted.length)];
+                isComm = true;
+              }
+            }
+          }
+
+          let prompt = "";
+          if (isComm && commTopic) {
+            prompt = `You are teaching a lesson in the master series: "Communication, Negotiation & Professional Skills" under the category "English Vocabulary".
+TOPIC: ${commTopic.topic}
+SUBMODULE: ${commTopic.module}
+CORE THEME: ${commTopic.description}
+
+PHILOSOPHY: The learner does NOT want manipulative tricks or dishonest tactics. The goal is to develop an ethical, confident, thoughtful communicator who understands human behaviour, listens carefully, expresses ideas clearly, handles disagreements intelligently, and negotiates fairly for mutual benefit (win-win).
+
+Line 1 MUST be:
+TOPIC: ${commTopic.topic}
+
+Follow this EXACT 11-part Markdown structure:
+## 1. Introduction
+## 2. Simple Explanation
+## 3. Background and Origin
+## 4. Detailed Explanation
+## 5. Real-Life Examples (College, Interviews/Salary, Workplace, Business/Clients, Everyday)
+## 6. Practical Conversation
+## 7. Vocabulary Builder (At least 5 words with pronunciation, simple meaning, origin, synonyms/antonyms, 5 sentences, and natural usage)
+## 8. Common Mistakes
+## 9. Practical Exercise (Scenario asking how learner would respond, prompt them to attempt answer first)
+## 10. Understanding Test (Three questions)
+## 11. Weekly Challenge (One small real-world activity)`;
+          } else {
+            const usedTopics = state.rouletteHistory
+              .filter((r) => r.category === chosenCategory)
+              .slice(0, 20)
+              .map((r) => r.topic)
+              .join(", ") || "None yet";
+            const vocabExtra = chosenCategory === "English Vocabulary"
+              ? "\nInclude pronunciation, simple meaning, word origin, synonyms/antonyms, 5 example sentences, and how to use it naturally."
+              : "";
+            prompt = `Select ONE fascinating, relatively unfamiliar topic in "${chosenCategory}". Avoid: ${usedTopics}.${vocabExtra}\nLine 1 MUST be: TOPIC: <Short Title>\nThen write a simple-English beginner-friendly lesson with these 9 sections:\n## 1. Topic Introduction\n## 2. What Does It Mean?\n## 3. Background and Origin\n## 4. Detailed Explanation\n## 5. Interesting Facts\n## 6. Real-Life Examples and Connections\n## 7. Why Is This Important?\n## 8. Three Surprising Things to Remember\n## 9. Three Questions to Test Your Understanding`;
+          }
+
+          const { text } = await callGeminiDirectInBrowser(
+            BROWSER_SYSTEM_PROMPT,
+            [{ role: "user", parts: [{ text: prompt }] }],
+            8192
+          );
+          const lines = text.split("\n");
+          let topic = (isComm && commTopic) ? commTopic.topic : `Discovery in ${chosenCategory}`;
+          let articleLines = lines;
+          if (lines[0] && lines[0].trim().toUpperCase().startsWith("TOPIC:")) {
+            topic = lines[0].split(":", 2)[1].trim() || topic;
+            articleLines = lines.slice(1);
+          }
+          const lesson = {
+            id: Date.now(),
+            spinDate: getLocalDateStr(),
+            isOfficial,
+            category: chosenCategory,
+            topic,
+            article: articleLines.join("\n").trim()
+          };
+          state.activeLesson = lesson;
+          if (lesson.isOfficial) state.officialToday = lesson;
+          state.rouletteHistory.unshift(lesson);
+          saveRouletteToStorage();
+          await loadLearningTopicsFromServer();
+          renderRouletteState();
+        } catch (err) {
+          document.getElementById("roulette-article-card").innerHTML =
+            `<div class="text-sm text-[#7F1D1D] space-y-2"><p class="font-semibold">Gemini API Error: ${err.message}</p><p class="text-xs">Verify that your API key is a valid Google AI Studio Gemini key (usually starts with <code>AIza...</code>).</p></div>`;
+          renderRouletteState();
+        }
+        return;
+      }
+
+      if (!canUseBackend || !state.backendHealthy) {
+        showRouletteSetupNotice(chosenCategory, isOfficial);
+        renderRouletteState();
+        return;
+      }
+
+      try {
+        const res = await fetch("/api/roulette/spin", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            category: chosenCategory,
+            topic: targetTopic || undefined,
+            isOfficial,
+            localDate: getLocalDateStr()
+          })
+        });
+
+        const data = await res.json().catch(() => ({}));
+        if (res.status === 409 && data.existing) {
+          state.officialToday = data.existing;
+          state.activeLesson = data.existing;
+          renderRouletteState();
+          return;
+        }
+        if (!res.ok) {
+          if (data.error === "API_KEY_MISSING") {
+            showRouletteSetupNotice(chosenCategory, isOfficial, true);
+            renderRouletteState();
+            return;
+          }
+          throw new Error(data.message || `HTTP ${res.status}`);
+        }
+
+        const lesson = data.lesson;
+        state.activeLesson = lesson;
+        if (lesson.isOfficial) {
+          state.officialToday = lesson;
+        }
+        state.rouletteHistory.unshift(lesson);
+        saveRouletteToStorage();
+        await loadLearningTopicsFromServer();
+        renderRouletteState();
+      } catch (err) {
+        document.getElementById("roulette-article-card").innerHTML = `
+          <div class="text-sm text-[#7F1D1D] space-y-2">
+            <p class="font-semibold">Could not generate today's lesson: ${err.message}</p>
+            <p class="text-xs">Please check that <code>server.py</code> is running and your <code>GEMINI_API_KEY</code> is valid.</p>
+          </div>
+        `;
+        renderRouletteState();
+      }
+    }
+
+    function showRouletteLoading(category, isOfficial) {
+      const area = document.getElementById("roulette-lesson-area");
+      area.classList.remove("hidden");
+      document.getElementById("lesson-type-badge").textContent = isOfficial ? "Official Daily Spin" : "Practice Spin";
+      document.getElementById("lesson-date-label").textContent = getLocalDateStr();
+      document.getElementById("lesson-category-heading").textContent = `Landed on: ${category}`;
+      document.getElementById("lesson-topic-pill").textContent = "Discovering topic...";
+      document.getElementById("roulette-actions").classList.add("hidden");
+      document.getElementById("roulette-article-card").innerHTML = `
+        <div class="py-8 flex flex-col items-center justify-center text-center space-y-3">
+          <div class="inline-flex gap-1.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-[#B85D3B] dot-1"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-[#B85D3B] dot-2"></span>
+            <span class="w-2.5 h-2.5 rounded-full bg-[#B85D3B] dot-3"></span>
+          </div>
+          <p class="text-sm font-medium text-[#3A352F]">Agora is crafting a deep, beginner-friendly lesson in <strong>${category}</strong>...</p>
+        </div>
+      `;
+      area.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function showRouletteSetupNotice(category, isOfficial, missingKeyOnly = false) {
+      const area = document.getElementById("roulette-lesson-area");
+      area.classList.remove("hidden");
+      document.getElementById("lesson-type-badge").textContent = isOfficial ? "Official Daily Spin" : "Practice Spin";
+      document.getElementById("lesson-date-label").textContent = getLocalDateStr();
+      document.getElementById("lesson-category-heading").textContent = `Selected Category: ${category}`;
+      document.getElementById("lesson-topic-pill").textContent = "Backend Setup Needed";
+      document.getElementById("roulette-actions").classList.add("hidden");
+
+      const msg = missingKeyOnly
+        ? "### Gemini API Key Needed\nThe Agora server is running, but `GEMINI_API_KEY` is not configured.\n\nSet `GEMINI_API_KEY` in your terminal or `.env` file, restart `python3 server.py`, and spin again to generate and save your lesson in SQLite (`agora.db`)."
+        : "### Connect the Agora Backend to Generate Lessons\nThe wheel selected **" + category + "**, and in the full app Agora calls your Python backend (`server.py`) to generate a unique 9-part lesson with Gemini and save it in SQLite (`agora.db`).\n\n**How to run it locally:**\n1. Unzip `agora_app.zip` and open the folder in your terminal.\n2. Set your key: `export GEMINI_API_KEY=\"your_key_here\"`\n3. Run `python3 server.py` and open `http://127.0.0.1:8000`";
+
+      document.getElementById("roulette-article-card").innerHTML =
+        `<div class="prose-agora font-serif-editorial text-[15.5px] leading-relaxed">${renderMarkdown(msg)}</div>`;
+    }
+
+    function renderRouletteState() {
+      const btnOfficial = document.getElementById("btn-spin-official");
+      const btnPractice = document.getElementById("btn-spin-practice");
+      const statusNote = document.getElementById("roulette-status-note");
+      const sidebarBadge = document.getElementById("sidebar-roulette-badge");
+
+      btnOfficial.disabled = state.isSpinning || Boolean(state.officialToday);
+      btnPractice.disabled = state.isSpinning;
+
+      if (state.officialToday) {
+        btnOfficial.textContent = "Today's Official Spin Claimed";
+        statusNote.textContent = `Today's official topic: "${state.officialToday.topic}" (${state.officialToday.category}). Use Practice Spin to explore more!`;
+        sidebarBadge.textContent = "Done Today";
+      } else {
+        btnOfficial.textContent = "SPIN FOR TODAY'S TOPIC";
+        statusNote.textContent = "One official daily spin per calendar day. Use Practice Spin anytime without replacing today's official topic.";
+        sidebarBadge.textContent = "Ready";
+      }
+
+      if (state.activeLesson) {
+        const lesson = state.activeLesson;
+        document.getElementById("roulette-lesson-area").classList.remove("hidden");
+        document.getElementById("lesson-type-badge").textContent = lesson.isOfficial ? "Official Daily Spin" : "Practice Spin";
+        document.getElementById("lesson-date-label").textContent = lesson.spinDate;
+        document.getElementById("lesson-category-heading").textContent = lesson.topic;
+        document.getElementById("lesson-topic-pill").textContent = lesson.category;
+        document.getElementById("roulette-article-card").innerHTML =
+          `<div class="prose-agora font-serif-editorial text-[15.5px] leading-relaxed">${renderMarkdown(lesson.article)}</div>`;
+        document.getElementById("roulette-actions").classList.remove("hidden");
+      }
+
+      const historyEl = document.getElementById("roulette-history-list");
+      if (!state.rouletteHistory.length) {
+        historyEl.innerHTML =
+          '<p class="text-xs text-[#8C7A68] italic col-span-full">No spins recorded yet. Spin the wheel above to start your daily discovery log!</p>';
+      } else {
+        historyEl.innerHTML = state.rouletteHistory
+          .map((item) => {
+            const isActive = state.activeLesson && state.activeLesson.id === item.id;
+            return `
+              <button type="button" data-lesson-id="${item.id}"
+                class="roulette-history-btn text-left p-3.5 rounded-xl border transition-colors ${
+                  isActive
+                    ? "bg-[#FAF8F4] border-[#B85D3B] shadow-sm"
+                    : "bg-white hover:bg-[#FAF8F4] border-[#E5DFD5]"
+                }">
+                <div class="flex items-center justify-between gap-2 mb-1">
+                  <span class="text-[10px] font-semibold uppercase tracking-wider text-[#B85D3B]">${item.category}</span>
+                  <span class="text-[10px] text-[#7A7267]">${item.spinDate} • ${item.isOfficial ? "Daily" : "Practice"}</span>
+                </div>
+                <div class="text-sm font-semibold text-[#1F1D1A] line-clamp-1">${item.topic.replace(/</g, "&lt;")}</div>
+              </button>
+            `;
+          })
+          .join("");
+
+        historyEl.querySelectorAll(".roulette-history-btn").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = Number(btn.getAttribute("data-lesson-id"));
+            const found = state.rouletteHistory.find((r) => r.id === id);
+            if (found) {
+              state.activeLesson = found;
+              renderRouletteState();
+              document.getElementById("roulette-lesson-area").scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+          });
+        });
+      }
+    }
+
+    function continueRouletteInChat(actionLabel) {
+      if (!state.activeLesson) return;
+      const lesson = state.activeLesson;
+
+      // Seed Chat Companion with the roulette lesson as context
+      state.currentSessionId = `roulette_${lesson.id}_${Date.now()}`;
+      state.messages = [
+        {
+          role: "user",
+          text: `Teach me about "${lesson.topic}" (${lesson.category}).`
+        },
+        {
+          role: "assistant",
+          text: `**${lesson.topic}**\n\n${lesson.article}`,
+          meta: `Daily Knowledge Roulette • ${lesson.category}`
+        }
+      ];
+
+      const followUpPrompts = {
+        "Practice Exercise": `Let's practice the practical scenario from Section 9 of "${lesson.topic}". Present the situation clearly and ask me: "How would you respond in this situation?" Let me attempt my answer first before evaluating and revealing the ideal response!`,
+        "Test My Understanding": `Quiz me on the 3 understanding questions from Section 10 of "${lesson.topic}". Ask me Question 1 first and let me attempt my answer before moving forward.`,
+        "Explain More": `Go deeper into "${lesson.topic}"—what are the most fascinating details or debates we haven't covered yet?`,
+        "Explain in Simpler English": `Explain "${lesson.topic}" again in even simpler English, using a short everyday analogy.`,
+        "Give Me Real-Life Examples": `Give me 3 concrete, relatable real-life examples of "${lesson.topic}".`,
+        "Tell Me Something More Surprising": `Tell me something genuinely surprising or counterintuitive about "${lesson.topic}" that most people never hear.`,
+        "Quiz Me": `Quiz me on "${lesson.topic}"! Ask me one question at a time and wait for my answer before revealing the solution.`,
+        "Explore Related Topics": `What are 3 fascinating related topics connected to "${lesson.topic}" across philosophy, science, history, or psychology, and how do they connect?`
+      };
+
+      setView("chat");
+      setMode("llm");
+      sendUserMessage(followUpPrompts[actionLabel] || actionLabel);
+    }
+
+    /* =========================================================================
+       6. CHAT SESSION & VIEW MANAGEMENT
+       ========================================================================= */
+    function setView(viewName) {
+      state.activeView = viewName;
+      const chatEl = document.getElementById("view-chat");
+      const rouletteEl = document.getElementById("view-roulette");
+      const btnChat = document.getElementById("btn-view-chat");
+      const btnRoulette = document.getElementById("btn-view-roulette");
+
+      if (viewName === "chat") {
+        chatEl.classList.remove("hidden");
+        rouletteEl.classList.add("hidden");
+        btnChat.className = "px-3 py-1.5 rounded-md text-xs font-medium transition-colors bg-[#B85D3B] text-white";
+        btnRoulette.className = "px-3 py-1.5 rounded-md text-xs font-medium transition-colors text-[#D6CFC4] hover:text-white";
+      } else {
+        chatEl.classList.add("hidden");
+        rouletteEl.classList.remove("hidden");
+        btnChat.className = "px-3 py-1.5 rounded-md text-xs font-medium transition-colors text-[#D6CFC4] hover:text-white";
+        btnRoulette.className = "px-3 py-1.5 rounded-md text-xs font-medium transition-colors bg-[#B85D3B] text-white";
+        renderRouletteState();
+      }
+    }
+
+    function startNewChat() {
+      state.currentSessionId = `session_${Date.now()}`;
+      state.messages = [
+        {
+          role: "assistant",
+          text:
+            "Welcome to **Agora**. Ask me about anything you're curious about—ancient civilizations, how the universe began, mythology, world religions, human psychology, or philosophy.\n\n" +
+            "I'll explain ideas in plain, everyday English, connect them to real life, and follow along as you ask deeper questions.",
+          meta: "Ready to explore"
+        }
+      ];
+      renderChat();
+      renderTopicExplorer();
+    }
+
+    function saveCurrentSessionToHistory(firstUserPrompt) {
+      const existingIdx = state.history.findIndex((h) => h.id === state.currentSessionId);
+      const title =
+        firstUserPrompt.length > 48
+          ? firstUserPrompt.slice(0, 48) + "..."
+          : firstUserPrompt;
+
+      const record = {
+        id: state.currentSessionId,
+        title: existingIdx >= 0 ? state.history[existingIdx].title : title,
+        mode: state.mode,
+        updatedAt: new Date().toLocaleDateString(),
+        messages: state.messages
+      };
+
+      if (existingIdx >= 0) {
+        state.history[existingIdx] = record;
+      } else {
+        state.history.unshift(record);
+      }
+      saveHistoryToStorage();
+      renderLearningHistory();
+    }
+
+    function loadSessionFromHistory(sessionId) {
+      const found = state.history.find((h) => h.id === sessionId);
+      if (!found) return;
+      state.currentSessionId = found.id;
+      state.messages = found.messages.map((m) => ({ ...m }));
+      setView("chat");
+      renderChat();
+      closeMobileSidebar();
+    }
+
+    function renderDailyConcept() {
+      const concept = getTodaysConcept();
+      document.getElementById("daily-concept-category").textContent = concept.category;
+      document.getElementById("daily-concept-title").textContent = concept.title;
+      document.getElementById("daily-concept-teaser").textContent = concept.teaser;
+    }
+
+    function renderLearningHistory() {
+      const container = document.getElementById("learning-history-list");
+      if (!state.history.length) {
+        container.innerHTML =
+          '<p class="text-xs text-[#8C7A68] italic px-1">Your explored topics will appear here.</p>';
+        return;
+      }
+      container.innerHTML = state.history
+        .map((item) => {
+          const isActive = item.id === state.currentSessionId;
+          return `
+            <button type="button" data-session-id="${item.id}"
+              class="history-item w-full text-left px-3 py-2 rounded-xl text-xs transition-colors border ${
+                isActive
+                  ? "bg-white border-[#B85D3B]/50 text-[#1F1D1A] font-medium shadow-sm"
+                  : "bg-transparent border-transparent hover:bg-white/70 text-[#4B453D]"
+              }">
+              <div class="truncate">${item.title.replace(/</g, "&lt;")}</div>
+              <div class="text-[10px] text-[#8C7A68] mt-0.5">${item.updatedAt}</div>
+            </button>
+          `;
+        })
+        .join("");
+
+      container.querySelectorAll(".history-item").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          loadSessionFromHistory(btn.getAttribute("data-session-id"));
+        });
+      });
+    }
+
+    function renderTopicExplorer() {
+      const tabsEl = document.getElementById("category-tabs");
+      const questionsEl = document.getElementById("category-questions");
+
+      tabsEl.innerHTML = TOPIC_CATEGORIES.map((cat) => {
+        const active = cat.id === state.activeCategoryId;
+        return `
+          <button type="button" data-cat-id="${cat.id}"
+            class="cat-tab-btn px-2.5 py-1 rounded-lg text-[11px] font-medium transition-colors ${
+              active
+                ? "bg-[#1F1D1A] text-white"
+                : "bg-white hover:bg-[#EFE9DF] text-[#4B453D] border border-[#DFD7CA]"
+            }">
+            ${cat.name}
+          </button>
+        `;
+      }).join("");
+
+      const activeCat =
+        TOPIC_CATEGORIES.find((c) => c.id === state.activeCategoryId) || TOPIC_CATEGORIES[0];
+
+      questionsEl.innerHTML = activeCat.questions
+        .map(
+          (q, idx) => `
+          <button type="button" data-q-idx="${idx}"
+            class="cat-q-btn px-3 py-1.5 rounded-full text-xs bg-white hover:bg-[#EFE9DF] text-[#1F1D1A] border border-[#DFD7CA] transition-colors text-left">
+            ${q}
+          </button>
+        `
+        )
+        .join("");
+
+      tabsEl.querySelectorAll(".cat-tab-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          state.activeCategoryId = btn.getAttribute("data-cat-id");
+          renderTopicExplorer();
+        });
+      });
+
+      questionsEl.querySelectorAll(".cat-q-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const q = activeCat.questions[Number(btn.getAttribute("data-q-idx"))];
+          document.getElementById("topic-explorer").classList.add("hidden");
+          sendUserMessage(q);
+        });
+      });
+    }
+
+    function renderChat() {
+      const chatEl = document.getElementById("chat-messages");
+      const hasUserMessages = state.messages.some((m) => m.role === "user");
+
+      if (!hasUserMessages) {
+        document.getElementById("topic-explorer").classList.remove("hidden");
+      }
+
+      const bubblesHtml = state.messages
+        .map((msg) => {
+          if (msg.role === "user") {
+            return `
+              <div class="flex justify-end">
+                <div class="max-w-[85%] sm:max-w-[75%] rounded-2xl rounded-br-sm bg-[#1F1D1A] text-[#F7F4EF] px-4 py-3 text-sm leading-relaxed shadow-sm">
+                  <div>${msg.text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+                </div>
+              </div>
+            `;
+          }
+
+          const cardStyle = msg.isError
+            ? "bg-[#FEF2F2] border-[#FECACA] text-[#7F1D1D]"
+            : msg.isSetupNotice
+            ? "bg-[#FFFBEB] border-[#FDE68A] text-[#78350F]"
+            : "bg-[#FAF8F4] border-[#E6DFD3] text-[#2C2823]";
+
+          return `
+            <div class="flex justify-start">
+              <div class="max-w-[92%] sm:max-w-[84%] rounded-2xl rounded-bl-sm border px-4 sm:px-5 py-3.5 text-sm leading-relaxed shadow-sm ${cardStyle}">
+                <div class="prose-agora font-serif-editorial text-[15.5px] leading-relaxed">
+                  ${renderMarkdown(msg.text)}
+                </div>
+                <div class="text-[10px] font-medium opacity-75 mt-2.5 pt-1.5 border-t border-black/10">
+                  ${msg.meta || ""}
+                </div>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+
+      const loadingHtml = state.isLoading
+        ? `
+          <div class="flex justify-start">
+            <div class="rounded-2xl rounded-bl-sm bg-[#FAF8F4] border border-[#E6DFD3] px-4 py-3 text-xs text-[#5C554C] flex items-center gap-2">
+              <span>Agora is thinking</span>
+              <span class="inline-flex gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#2C5E4F] dot-1"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-[#2C5E4F] dot-2"></span>
+                <span class="w-1.5 h-1.5 rounded-full bg-[#2C5E4F] dot-3"></span>
+              </span>
+            </div>
+          </div>
+        `
+        : "";
+
+      chatEl.innerHTML = bubblesHtml + loadingHtml;
+      chatEl.scrollTop = chatEl.scrollHeight;
+
+      const followupBar = document.getElementById("followup-bar");
+      if (hasUserMessages && !state.isLoading && state.mode === "llm") {
+        followupBar.classList.remove("hidden");
+      } else {
+        followupBar.classList.add("hidden");
+      }
+
+      document.getElementById("btn-send").disabled = state.isLoading;
+    }
+
+    function setMode(newMode) {
+      state.mode = newMode;
+      const btnLlm = document.getElementById("btn-mode-llm");
+      const btnRule = document.getElementById("btn-mode-rule");
+      const dot = document.getElementById("mode-dot");
+      const label = document.getElementById("mode-label");
+
+      if (newMode === "llm") {
+        btnLlm.className = "px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors bg-[#2C5E4F] text-white";
+        btnRule.className = "px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors text-[#D6CFC4] hover:text-white";
+        dot.className = "w-2 h-2 rounded-full bg-[#2C5E4F] shrink-0";
+        label.textContent = "AI Companion Mode — context-aware explanations across 7 knowledge domains";
+      } else {
+        btnLlm.className = "px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors text-[#D6CFC4] hover:text-white";
+        btnRule.className = "px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors bg-[#B85D3B] text-white";
+        dot.className = "w-2 h-2 rounded-full bg-[#B85D3B] shrink-0";
+        label.textContent = "Rule-Based Demo — simple keyword matching (not an AI model)";
+      }
+      renderChat();
+    }
+
+    async function sendUserMessage(rawText) {
+      const text = rawText.trim();
+      if (!text || state.isLoading) return;
+
+      setView("chat");
+      const isFirstUserTurn = !state.messages.some((m) => m.role === "user");
+      state.messages.push({ role: "user", text });
+      document.getElementById("topic-explorer").classList.add("hidden");
+
+      if (state.mode === "rule") {
+        const reply = getRuleBasedReply(text);
+        state.messages.push({ role: "assistant", text: reply.text, meta: reply.meta });
+        saveCurrentSessionToHistory(isFirstUserTurn ? text : state.messages.find((m) => m.role === "user").text);
+        renderChat();
+        return;
+      }
+
+      state.isLoading = true;
+      renderChat();
+
+      try {
+        const apiMessages = state.messages.filter((m) => !m.isSetupNotice && !m.isError);
+        const result = await requestLLMReply(apiMessages);
+        state.messages.push({
+          role: "assistant",
+          text: result.text,
+          meta: result.meta,
+          isSetupNotice: Boolean(result.isSetupNotice)
+        });
+        if (!result.isSetupNotice) {
+          saveCurrentSessionToHistory(isFirstUserTurn ? text : state.messages.find((m) => m.role === "user").text);
+        }
+      } catch (err) {
+        state.messages.push({
+          role: "assistant",
+          text: `**Something went wrong:** ${err.message}\n\nPlease check that \`server.py\` is running and your \`GEMINI_API_KEY\` is valid.`,
+          meta: "Connection Error",
+          isError: true
+        });
+      } finally {
+        state.isLoading = false;
+        renderChat();
+      }
+    }
+
+    /* =========================================================================
+       7. MODAL, SIDEBAR & EVENT LISTENERS
+       ========================================================================= */
+    function openMobileSidebar() {
+      document.getElementById("learning-sidebar").classList.remove("-translate-x-full");
+      document.getElementById("sidebar-backdrop").classList.remove("hidden");
+    }
+
+    function closeMobileSidebar() {
+      document.getElementById("learning-sidebar").classList.add("-translate-x-full");
+      document.getElementById("sidebar-backdrop").classList.add("hidden");
+    }
+
+    function openCompareModal() {
+      document.getElementById("compare-modal").classList.remove("hidden");
+      document.getElementById("compare-a").focus();
+    }
+
+    function closeCompareModal() {
+      document.getElementById("compare-modal").classList.add("hidden");
+    }
+
+    document.getElementById("chat-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const input = document.getElementById("user-input");
+      const val = input.value;
+      input.value = "";
+      sendUserMessage(val);
+    });
+
+    document.getElementById("btn-view-chat").addEventListener("click", () => setView("chat"));
+    document.getElementById("btn-view-roulette").addEventListener("click", () => setView("roulette"));
+    document.getElementById("btn-sidebar-roulette").addEventListener("click", () => {
+      closeMobileSidebar();
+      setView("roulette");
+    });
+
+    document.getElementById("btn-spin-official").addEventListener("click", () => spinRoulette(true));
+    document.getElementById("btn-spin-practice").addEventListener("click", () => spinRoulette(false));
+
+    document.querySelectorAll(".roulette-action-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        continueRouletteInChat(btn.getAttribute("data-action"));
+      });
+    });
+
+    document.getElementById("btn-mode-llm").addEventListener("click", () => setMode("llm"));
+    document.getElementById("btn-mode-rule").addEventListener("click", () => setMode("rule"));
+    document.getElementById("btn-new-chat").addEventListener("click", () => {
+      setView("chat");
+      startNewChat();
+    });
+
+    document.getElementById("btn-toggle-topics").addEventListener("click", () => {
+      document.getElementById("topic-explorer").classList.toggle("hidden");
+    });
+    document.getElementById("btn-close-topics").addEventListener("click", () => {
+      document.getElementById("topic-explorer").classList.add("hidden");
+    });
+
+    document.getElementById("btn-daily-concept").addEventListener("click", () => {
+      closeMobileSidebar();
+      sendUserMessage(getTodaysConcept().prompt);
+    });
+
+    document.getElementById("btn-random-topic").addEventListener("click", () => {
+      closeMobileSidebar();
+      const pick = RANDOM_QUESTIONS[Math.floor(Math.random() * RANDOM_QUESTIONS.length)];
+      sendUserMessage(pick);
+    });
+
+    document.getElementById("btn-ask-deeper").addEventListener("click", () => {
+      sendUserMessage("Can you go deeper into the most fascinating part of your previous explanation?");
+    });
+    document.getElementById("btn-explain-beginner").addEventListener("click", () => {
+      sendUserMessage("Explain that again as if I'm a complete beginner, using an everyday analogy.");
+    });
+    document.getElementById("btn-connect-subject").addEventListener("click", () => {
+      sendUserMessage("How does that idea connect to another subject like history, psychology, or science?");
+    });
+
+    document.getElementById("btn-clear-history").addEventListener("click", () => {
+      state.history = [];
+      saveHistoryToStorage();
+      renderLearningHistory();
+    });
+
+    document.getElementById("btn-toggle-sidebar").addEventListener("click", openMobileSidebar);
+    document.getElementById("btn-close-sidebar").addEventListener("click", closeMobileSidebar);
+    document.getElementById("sidebar-backdrop").addEventListener("click", closeMobileSidebar);
+
+    document.getElementById("btn-open-compare").addEventListener("click", () => {
+      closeMobileSidebar();
+      openCompareModal();
+    });
+    document.getElementById("btn-close-compare").addEventListener("click", closeCompareModal);
+    document.getElementById("btn-cancel-compare").addEventListener("click", closeCompareModal);
+
+    document.querySelectorAll(".compare-preset").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const [a, b] = btn.getAttribute("data-pair").split("|");
+        document.getElementById("compare-a").value = a;
+        document.getElementById("compare-b").value = b;
+      });
+    });
+
+    document.getElementById("compare-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const a = document.getElementById("compare-a").value.trim();
+      const b = document.getElementById("compare-b").value.trim();
+      if (!a || !b) return;
+      closeCompareModal();
+      sendUserMessage(
+        `Compare ${a} and ${b} in simple English: what do they share, how do they differ, and what does each teach us?`
+      );
+    });
+
+    function setCommFilter(filter) {
+      state.activeCommFilter = filter;
+      const btnAll = document.getElementById("filter-comm-all");
+      const btnNeg = document.getElementById("filter-comm-negotiation");
+      const btnSkills = document.getElementById("filter-comm-skills");
+      const btnUncompleted = document.getElementById("filter-comm-uncompleted");
+      if (!btnAll) return;
+
+      const activeClass = "px-2.5 py-1 rounded-md font-medium bg-[#1F1D1A] text-white transition-colors";
+      const inactiveClass = "px-2.5 py-1 rounded-md font-medium text-[#5C554C] hover:text-[#1F1D1A] transition-colors";
+
+      btnAll.className = filter === "all" ? activeClass : inactiveClass;
+      btnNeg.className = filter === "negotiation" ? activeClass : inactiveClass;
+      btnSkills.className = filter === "skills" ? activeClass : inactiveClass;
+      btnUncompleted.className = filter === "uncompleted" ? activeClass : inactiveClass;
+
+      renderLearningTopics();
+    }
+
+    document.getElementById("filter-comm-all")?.addEventListener("click", () => setCommFilter("all"));
+    document.getElementById("filter-comm-negotiation")?.addEventListener("click", () => setCommFilter("negotiation"));
+    document.getElementById("filter-comm-skills")?.addEventListener("click", () => setCommFilter("skills"));
+    document.getElementById("filter-comm-uncompleted")?.addEventListener("click", () => setCommFilter("uncompleted"));
+
+    document.getElementById("btn-spin-comm-random")?.addEventListener("click", () => {
+      const uncompleted = (state.learningTopics || []).filter((t) => t.status !== "completed");
+      if (!uncompleted.length) {
+        alert("Congratulations! All 30 topics in the Communication & Negotiation module are completed. You can still review any topic below!");
+        return;
+      }
+      const pick = uncompleted[Math.floor(Math.random() * uncompleted.length)];
+      spinRoulette(false, pick.topic);
+      document.getElementById("roulette-wheel").scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+
+    document.getElementById("btn-apply-preview-key").addEventListener("click", () => {
+      const val = document.getElementById("preview-api-key-input").value.trim();
+      state.previewApiKey = val;
+      const dot = document.getElementById("backend-status-dot");
+      const text = document.getElementById("backend-status-text");
+      if (val) {
+        dot.className = "w-2 h-2 rounded-full bg-[#2C5E4F] shrink-0";
+        text.textContent = "Preview API key connected (in-memory)";
+      } else {
+        checkBackendHealth();
+      }
+    });
+
+    // Boot
+    loadStorage();
+    drawRouletteWheel();
+    renderDailyConcept();
+    renderLearningHistory();
+    loadLearningTopicsFromServer();
+    startNewChat();
+    checkBackendHealth();
+  </script>
+</body>
+</html>
